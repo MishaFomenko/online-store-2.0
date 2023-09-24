@@ -39,19 +39,35 @@ const defaultTheme = createTheme();
 export default function SignUp() {
 
   const router = useRouter();
-  const {setEmail, setPassword, user, setPage, setNewUserData} = useUserContext();
+  const {user, setUser} = useUserContext();
 
-  const handleSubmit = (event) => {
+  const fetchUsers = async (page, email, password, newUserData) => {
+    if (email!=='' && password!=='') {
+        const newU = await fetch('../api/userauthentication', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                page,
+                password,
+                email,
+                newUserData
+            })
+        });
+        const newUser = await newU.json();
+        setUser(newUser)
+    };
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setPage('register')
-    setEmail(data.get('email'))
-    setPassword(data.get('password'))
-    setNewUserData({
-      'first': data.get('firstName'), 
-      'last': data.get('lastName')
-    })
-    
+    const newUserData = {
+      first: data.get('firstName'),
+      last: data.get('lastName'),
+    }
+    await fetchUsers('register', data.get('email'), data.get('password'), newUserData)
   };
 
   React.useEffect(()=>{

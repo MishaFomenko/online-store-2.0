@@ -17,17 +17,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function POST(req) {
-    const data = await req.json();
-
-    let userData;
-
-    if (data.action === 'getuser') {
-        const docRef = doc(db, data.collection, data.document);
-        const docSnap = await getDoc(docRef);
-        userData = docSnap.data();
-
+export async function GET(req) {
+    const currentURL = new URL(req.url);
+    const action = currentURL.searchParams.get('action');
+    const collection = currentURL.searchParams.get('collection');
+    const document = currentURL.searchParams.get('document');
+    try {
+        if (action === 'getuser') {
+            const docRef = doc(db, collection, document);
+            const docSnap = await getDoc(docRef);
+            const userData = docSnap.data();
+            return NextResponse.json( userData )
+        }
+    } catch(error) {
+        return NextResponse.json( error )
     }
 
-        return NextResponse.json( userData )
+        
 }

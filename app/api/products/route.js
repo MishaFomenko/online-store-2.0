@@ -22,22 +22,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function POST(req) {
-    const data = await req.json();
-
-    let products;
-
-    if (data.action === 'getdocument') {
-        const docRef = doc(db, data.collection, data.document);
-        const docSnap = await getDoc(docRef);
-        products = docSnap.data();
-
-        // if (docSnap.exists()) {
-        //   console.log("Document data:", docSnap.data());
-        // } else {
-        //   console.log("No such document!");
-        // }
+export async function GET(req) {
+    const currentURL = new URL(req.url);
+    console.log(currentURL)
+    const action = currentURL.searchParams.get('action');
+    console.log(action)
+    const collection = currentURL.searchParams.get('collection');
+    const document = currentURL.searchParams.get('document');
+    try {
+        if (action === 'getdocument') {
+            const docRef = doc(db, collection, document);
+            const docSnap = await getDoc(docRef);
+            const products = docSnap.data();
+            const ratings = products.searchProductDetails.map(item=>item.prime)
+            return NextResponse.json( products )
+        }
+    } catch(error) {
+        return NextResponse.json( error )
     }
+    
 
-        return NextResponse.json( products.searchProductDetails[4] )
+        
 }

@@ -15,6 +15,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+
+
 
 
 function Copyright(props) {
@@ -32,33 +35,25 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+const auth = getAuth();
+
+
+export default function PasswordReset() {
 
   const router = useRouter();
   const {user, setUser} = useUserContext();
 
-  const fetchUsers = async (page, email, password) => {
-    if (email!=='' && password!=='') {
-        const newU = await fetch('../api/userauthentication', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                page,
-                password,
-                email,
-            })
-        });
-        const newUser = await newU.json();
-        setUser(newUser)
-    };
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await fetchUsers('signin', data.get('email'), data.get('password'))
+    sendPasswordResetEmail(auth, data.get('email'))
+    .then(() => {
+    })
+    .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+    router.push('/signin')
   };
 
   React.useEffect(()=>{
@@ -81,7 +76,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Password reset
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -94,34 +89,15 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="outlined" //"contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              SEND AN EMAIL
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/passwordreset" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/registration" variant="body2">
                   {"Don't have an account? Sign Up"}
