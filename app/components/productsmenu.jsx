@@ -5,14 +5,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import ShortTextIcon from '@mui/icons-material/ShortText';
+import Link from 'next/link'
+
 
 export default function ProductsMenu() {
     const initOpen = {
@@ -68,12 +68,14 @@ export default function ProductsMenu() {
       <Collapse in={open.catOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
             {categories.sort().map((item, ind) => 
-                <ListItemButton sx={{ pl: 4 }} key={ind}>
+              <Link href={`/${item}`} key={ind}>
+                <ListItemButton sx={{ pl: 4 }}>
                     <ListItemIcon>
                     <ShortTextIcon />
                     </ListItemIcon>
                     <ListItemText primary={item} />
                 </ListItemButton>
+               </Link>
             )}
         </List>
       </Collapse>
@@ -88,12 +90,14 @@ export default function ProductsMenu() {
       <Collapse in={open.famOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
             {family.sort().map((item, ind) => 
+              <Link href={`/${item}`} key={ind}>
                 <ListItemButton sx={{ pl: 4 }} key={ind}>
                     <ListItemIcon>
                     <ShortTextIcon />
                     </ListItemIcon>
                     <ListItemText primary={item} />
                 </ListItemButton>
+              </Link>
             )}
         </List>
       </Collapse>
@@ -108,12 +112,14 @@ export default function ProductsMenu() {
       <Collapse in={open.fooOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
         {foods.sort().map((item, ind) => 
+              <Link href={`/${item}`} key={ind}>
                 <ListItemButton sx={{ pl: 4 }} key={ind}>
                     <ListItemIcon>
                     <ShortTextIcon />
                     </ListItemIcon>
                     <ListItemText primary={item} />
                 </ListItemButton>
+              </Link>
             )}
         </List>
       </Collapse>

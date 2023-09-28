@@ -15,6 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
+import { setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 
 
 function Copyright(props) {
@@ -35,30 +36,26 @@ const defaultTheme = createTheme();
 export default function SignIn() {
 
   const router = useRouter();
-  const {user, setUser} = useUserContext();
+  const {user, setUser, auth} = useUserContext();
 
-  const fetchUsers = async (page, email, password) => {
+  const signinUser = async (email, password) => {
     if (email!=='' && password!=='') {
-        const newU = await fetch('../api/userauthentication', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                page,
-                password,
-                email,
-            })
-        });
-        const newUser = await newU.json();
-        setUser(newUser)
+        const userCredential = await setPersistence(auth, browserSessionPersistence)
+          .then(async() => {
+            return await signInWithEmailAndPassword(auth, email, password);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          });
+        setUser(userCredential.user)
     };
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await fetchUsers('signin', data.get('email'), data.get('password'))
+    await signinUser(data.get('email'), data.get('password'))
   };
 
   React.useEffect(()=>{

@@ -1,7 +1,8 @@
 'use client'
-import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { createContext, useContext, useState, useEffect } from 'react'
+import { getFirestore } from "firebase/firestore";
+import { createContext, useContext, useState } from 'react'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0",
@@ -13,48 +14,22 @@ const firebaseConfig = {
     measurementId: "G-W6DG7SC029"
   };
   
-  const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
 
 const db = getFirestore(app);
 
+
+
+
 const UserContext = createContext({});
 export const UserContextProvider = ({children}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [user, setUser] = useState(null)
-    const [page, setPage] = useState('');
-    const [newUserData, setNewUserData] = useState({});
-
-    const fetchUsers = async () => {
-        if (email!=='' && password!=='') {
-            const newU = await fetch('../api/userauthentication', {
-                method: 'POST',
-                headers: {
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                    page,
-                    password,
-                    email,
-                    newUserData,
-                })
-            });
-            const newUser = await newU.json();
-            setUser(newUser)
-        };
-    }
-
-    useEffect(() => {
-        
-        fetchUsers()
-
-    }, [email, password])
-
-    
 
 
     return (
-        <UserContext.Provider value={{user, setUser, email, setEmail, password, setPassword, page, setPage, db, setNewUserData}}>
+        <UserContext.Provider value={{user, setUser, auth, db}}>
             {children}
         </UserContext.Provider>
     )

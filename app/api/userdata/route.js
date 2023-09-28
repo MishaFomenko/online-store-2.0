@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
 
@@ -29,9 +29,20 @@ export async function GET(req) {
             const userData = docSnap.data();
             return NextResponse.json( userData )
         }
+        
+    } catch(error) {
+        return NextResponse.json( error )
+    }       
+}
+
+export async function POST(req) {
+    const userData = await req.json();
+    try {
+        if (userData.action==="register") {
+            await setDoc(doc(db, "userdata", userData.uid), userData.newUserData);
+            return NextResponse.json()
+        };
     } catch(error) {
         return NextResponse.json( error )
     }
-
-        
 }

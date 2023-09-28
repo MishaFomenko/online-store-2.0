@@ -5,22 +5,21 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-export default function ProductCard() {
+export default function ProductCard({imageURL, price, description}) {
   return (
-    <Card sx={{ maxWidth: 200, margin: 2, zIndex: 0}}>
+    <Card sx={{ maxWidth: 200, maxHeight: 600, margin: 2, zIndex: 0}}>
       <CardActionArea>
         <CardMedia
           component="img"
-          maxHeight="140"
-          image="/images/me.png"
+          image={imageURL}
           alt="product image"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Product
+            {price}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>

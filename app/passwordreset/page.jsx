@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 
 
@@ -35,13 +33,12 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-const auth = getAuth();
 
 
 export default function PasswordReset() {
 
   const router = useRouter();
-  const {user, setUser} = useUserContext();
+  const {auth} = useUserContext();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -55,10 +52,6 @@ export default function PasswordReset() {
   });
     router.push('/signin')
   };
-
-  React.useEffect(()=>{
-    user !== null && router.push('/')
-  })
 
   return (
     <ThemeProvider theme={defaultTheme}>

@@ -1,12 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
-import { doc, getDoc } from "firebase/firestore";
+import { getDocs, getDoc, doc, collection, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-
-
-
-
-
 
 
 const firebaseConfig = {
@@ -24,18 +19,32 @@ const db = getFirestore(app);
 
 export async function GET(req) {
     const currentURL = new URL(req.url);
-    console.log(currentURL)
     const action = currentURL.searchParams.get('action');
-    console.log(action)
-    const collection = currentURL.searchParams.get('collection');
-    const document = currentURL.searchParams.get('document');
+    
     try {
-        if (action === 'getdocument') {
-            const docRef = doc(db, collection, document);
-            const docSnap = await getDoc(docRef);
-            const products = docSnap.data();
-            const ratings = products.searchProductDetails.map(item=>item.prime)
-            return NextResponse.json( products )
+        if (action === 'homepage') {
+            const allData = await getDocs(collection(db, 'store'));
+            const bests = [];
+            const promises = allData.docs.map(async (document) => {
+            const bestSellers = await getDocs(query(collection(db, 'store', document.id, 'searchProductDetails'), where('productRating', '==', '5.0 out of 5 stars')));
+            const bestSellerPromises = bestSellers.docs.map(async (best) => {
+                const bestData = await best.data();
+                bests.push(bestData);
+            });
+            await Promise.all(bestSellerPromises);
+            });
+            await Promise.all(promises);
+            return NextResponse.json( bests )
+        } else if (action === 'categorypage') {
+            const category = currentURL.searchParams.get('category');
+            const prods = [];
+            const docData = await getDocs(collection(db, 'store', category, 'searchProductDetails'));
+            const prodsPromises = docData.docs.map(async (item) => {
+                const prodData = await item.data();
+                prods.push(prodData)
+            });
+            await Promise.all(prodsPromises);
+            return NextResponse.json( prods )
         }
     } catch(error) {
         return NextResponse.json( error )

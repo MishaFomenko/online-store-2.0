@@ -17,6 +17,9 @@ import { useRouter } from 'next/navigation';
 import { useUserContext } from '../context/usercontext';
 import ProductsMenu from './productsmenu';
 import SearchBar from './searchbar'
+import { getAuth, signOut, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
+
+const auth = getAuth();
 
 
 const pages = ['Home'];
@@ -47,11 +50,21 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleUserAccount = (setting) => {
+  const handleUserAccount = async (setting) => {
     if (setting === 'Profile') {
       route.push('../profile')
     }
     if (setting === 'Logout') {
+      const userCredential =await setPersistence(auth, browserSessionPersistence)
+          .then(async () => {
+            await signOut(auth).then(() => {
+            }).catch((error) => {
+            });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          });
       setUser(null)
       route.push('/signin')
     }

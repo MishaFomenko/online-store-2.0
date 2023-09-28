@@ -4,6 +4,7 @@ import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 
 
+
 export default function Profile() {
     const {user} = useUserContext();
     const [userData, setUserData] = useState({});
