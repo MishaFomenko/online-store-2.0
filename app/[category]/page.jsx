@@ -29,7 +29,7 @@
     return (
         <>
         <div className='flex flex-wrap'>
-        {prodsByCat.length!==0 && prodsByCat.map((item)=><ProductCard key={item.asin} imageURL={item.imgUrl} price={item.price} description={item.productDescription}/>)}
+        {prodsByCat.length!==0 && prodsByCat.map((item)=><ProductCard key={item.asin} item={item}/>)}
         </div>
         </>
     )

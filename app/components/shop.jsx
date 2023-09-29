@@ -48,11 +48,11 @@ export default function Shop() {
         <>
         <div className='h-16 bg-blue-400 flex items-center p-6'>Best Sellers</div>
         <div className='flex flex-wrap'>
-        {bs.length!==0 && bs.map((item)=><ProductCard key={item.asin} imageURL={item.imgUrl} price={item.price} description={item.productDescription}/>)}
+        {bs.length!==0 && bs.map((item)=><ProductCard key={item.asin} item={item}/>)}
         </div>
         <div className='h-16 bg-blue-400 flex items-center p-6'>Suggested for you</div>
         <div className='flex flex-wrap'>
-        {bs.length!==0 && bs.map((item)=><ProductCard key={item.asin} imageURL={item.imgUrl} price={item.price} description={item.productDescription}/>)}
+        {bs.length!==0 && bs.map((item)=><ProductCard key={item.asin} item={item}/>)}
         </div>
         </>
     )

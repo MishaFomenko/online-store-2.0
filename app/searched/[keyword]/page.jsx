@@ -26,10 +26,14 @@ export default function Page({params}) {
        }
      })
 
+     
+
    return (
        <>
        <div className='flex flex-wrap'>
-       {prodsByKw.length!==0 && prodsByKw.map((item)=><ProductCard key={item.asin} imageURL={item.imgUrl} price={item.price} description={item.productDescription}/>)}
+       {prodsByKw.length!==0 && prodsByKw.map((item)=>
+           <ProductCard key={item.asin} item={item}/>)
+        }
        </div>
        </>
    )
