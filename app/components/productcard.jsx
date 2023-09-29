@@ -16,7 +16,7 @@ export default function ProductCard({imageURL, price, description}) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {price}
+            {price===0 ? 'Free' : price + ' $'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {description}

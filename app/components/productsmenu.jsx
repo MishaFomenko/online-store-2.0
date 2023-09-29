@@ -33,7 +33,7 @@ export default function ProductsMenu() {
     };
 
     const categories = ['Accessories', 'Bags', 'Pants', 'Shoes', 'Hats', 'Beauty', 'Glasses', 'Jackets', 'Jeans', 'Jwewlry', 'Shirts', 'Shorts', 'Underwear', 'Watches'];
-    const family = ['Men', 'Women', 'Children'];
+    const family = ['Men', 'Women'];
     const foods = ['Bakery', 'Beverages', 'Dairy', 'Fruits', 'Meat', 'Seafood', 'Snacks', 'Vegetables'];
 
   return (

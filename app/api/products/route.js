@@ -2,6 +2,16 @@ import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
 import { getDocs, getDoc, doc, collection, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+const algoliasearch = require('algoliasearch')
+
+const ALGOLIA_ID = 'SY063LBNVY';
+const ALGOLIA_ADMIN_KEY = 'b9257495a6a6d0d4e273aafd56b1dcd2';
+const ALGOLIA_SEARCH_KEY = '25ccff8890d08db8a50400e79007f59f';
+
+const ALGOLIA_INDEX_NAME = 'products';
+const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+const index = client.initIndex(ALGOLIA_INDEX_NAME);
+
 
 
 const firebaseConfig = {
@@ -38,6 +48,26 @@ export async function GET(req) {
         } else if (action === 'categorypage') {
             const category = currentURL.searchParams.get('category');
             const prods = [];
+            if (category === 'men' || category === 'women') {
+                const searchParams = {
+                    hitsPerPage: 50,
+                    attributesToRetrieve: [
+                        'asin',
+                        'deliveryMessage',
+                        'imgUrl',
+                        'price',
+                        'productDescription',
+                    ],
+                };
+                const prodsByCat = await index.search(category, searchParams)
+                .then(({ hits }) => {
+                  return hits
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                });
+                return NextResponse.json( prodsByCat )
+        } else {
             const docData = await getDocs(collection(db, 'store', category, 'searchProductDetails'));
             const prodsPromises = docData.docs.map(async (item) => {
                 const prodData = await item.data();
@@ -45,6 +75,27 @@ export async function GET(req) {
             });
             await Promise.all(prodsPromises);
             return NextResponse.json( prods )
+        }
+        } else if (action==='keywordsearch') {
+            const kw = currentURL.searchParams.get('kw');
+                const searchParams = {
+                    hitsPerPage: 50,
+                    attributesToRetrieve: [
+                        'asin',
+                        'deliveryMessage',
+                        'imgUrl',
+                        'price',
+                        'productDescription',
+                    ],
+                };
+                const prodsByKw = await index.search(kw, searchParams)
+                .then(({ hits }) => {
+                  return hits
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                });
+                return NextResponse.json( prodsByKw )
         }
     } catch(error) {
         return NextResponse.json( error )
