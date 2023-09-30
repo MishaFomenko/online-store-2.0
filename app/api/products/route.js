@@ -4,18 +4,15 @@ import { getDocs, getDoc, doc, collection, query, where } from "firebase/firesto
 import { getFirestore } from "firebase/firestore";
 const algoliasearch = require('algoliasearch')
 
-const ALGOLIA_ID = 'SY063LBNVY';
-const ALGOLIA_ADMIN_KEY = 'b9257495a6a6d0d4e273aafd56b1dcd2';
-const ALGOLIA_SEARCH_KEY = '25ccff8890d08db8a50400e79007f59f';
 
 const ALGOLIA_INDEX_NAME = 'products';
-const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+const client = algoliasearch(process.env.ALGOLIA_ID, process.env.ALGOLIA_ADMIN_KEY);
 const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "onlinestore-2.firebaseapp.com",
     projectId: "onlinestore-2",
     storageBucket: "onlinestore-2.appspot.com",
@@ -33,6 +30,7 @@ export async function GET(req) {
     
     try {
         if (action === 'homepage') {
+
             const allData = await getDocs(collection(db, 'store'));
             const bests = [];
             const promises = allData.docs.map(async (document) => {
@@ -45,7 +43,9 @@ export async function GET(req) {
             });
             await Promise.all(promises);
             return NextResponse.json( bests )
+
         } else if (action === 'categorypage') {
+
             const category = currentURL.searchParams.get('category');
             const prods = [];
             if (category === 'men' || category === 'women') {
@@ -67,15 +67,15 @@ export async function GET(req) {
                   console.error('Error:', error);
                 });
                 return NextResponse.json( prodsByCat )
-        } else {
-            const docData = await getDocs(collection(db, 'store', category, 'searchProductDetails'));
-            const prodsPromises = docData.docs.map(async (item) => {
-                const prodData = await item.data();
-                prods.push(prodData)
-            });
-            await Promise.all(prodsPromises);
-            return NextResponse.json( prods )
-        }
+            } else {
+                const docData = await getDocs(collection(db, 'store', category, 'searchProductDetails'));
+                const prodsPromises = docData.docs.map(async (item) => {
+                    const prodData = await item.data();
+                    prods.push(prodData)
+                });
+                await Promise.all(prodsPromises);
+                return NextResponse.json( prods )
+            }
         } else if (action==='keywordsearch') {
             const kw = currentURL.searchParams.get('kw');
                 const searchParams = {

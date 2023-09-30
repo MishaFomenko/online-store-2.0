@@ -6,13 +6,28 @@ import { useRouter } from 'next/navigation'
 
 
 export default function Profile() {
-    const {user} = useUserContext();
     const [userData, setUserData] = useState({});
-    const route = useRouter();
+    const router = useRouter();
+    const {user, setUser} = useUserContext();
+    let prevUser = null;
+
+    useEffect(()=>{
+        if (user===null) {
+        try {
+            prevUser = JSON.parse(sessionStorage.getItem('firebase:authUser:AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0:[DEFAULT]'))
+            setUser(prevUser)
+        } catch {}
+        }
+    })
+    
+
+    useEffect(()=>{
+        user===null && prevUser===null && router.push('/registration')
+    },[])
 
     useEffect(()=>{
        if (user === null) {
-          route.push('/signin') 
+          router.push('/signin') 
         } else if (!userData.first) {
             async function fetchUser(action, collection, document) {
                 const res = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {

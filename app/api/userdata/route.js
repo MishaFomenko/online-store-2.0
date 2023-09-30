@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "onlinestore-2.firebaseapp.com",
     projectId: "onlinestore-2",
     storageBucket: "onlinestore-2.appspot.com",

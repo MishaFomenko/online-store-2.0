@@ -1,20 +1,54 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useCartContext } from '../../context/cartcontext';
+import { useUserContext } from '../../context/usercontext'
+import { useRouter } from 'next/navigation'
 
 export default function ProductPage() {
     const [count, setCount] = useState(1);
+    const {cart, setCart} = useCartContext();
     const searchParams = useSearchParams();
     const data = searchParams.get('data');
     const product = JSON.parse(data);
-    console.log(product)
+    const router = useRouter();
+    const {user, setUser} = useUserContext();
+    let prevUser = null;
+
+    useEffect(()=>{
+        if (user===null) {
+        try {
+            prevUser = JSON.parse(sessionStorage.getItem('firebase:authUser:AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0:[DEFAULT]'))
+            setUser(prevUser)
+        } catch {}
+        }
+    })
+    
+
+    useEffect(()=>{
+        user===null && prevUser===null && router.push('/registration')
+    },[])
 
     const handleDecrement = () => {
-        count > 0 && setCount(prev=>prev-1);
+        count > 1 && setCount(prev=>prev-1);
     }
     const handleIncrement = () => {
         setCount(prev=>prev+1);
+    }
+    const handleAddToCart = (product) => {
+        const indexPrev = cart.findIndex(item=>item.asin===product.asin);
+        if (indexPrev === -1) {
+            setCart(prev=>(
+                [...prev, {
+                        ...product,
+                        quantity: count
+                    }]))
+        } else {
+            const newCart = [...cart];
+            newCart[indexPrev].quantity += count;
+            setCart(newCart)
+        }
     }
 
     return (
@@ -35,7 +69,7 @@ export default function ProductPage() {
                 <p className='py-5'><span className='text-3xl'><b>Price:</b></span> <span className='text-2xl'>{product.price} $</span></p>
                 <p className='py-5'><span className='text-3xl'><b>Delivery info:</b></span> <span className='text-2xl'>{product.deliveryMessage}</span></p>
                 <div className='py-5 flex'>
-                    <button className='p-2 mr-5 bg-black text-white'>Add to cart +</button>
+                    <button className='p-2 mr-5 bg-black text-white' onClick={()=>handleAddToCart(product)}>Add to cart +</button>
                     <div className='flex mx-5'>
                         <button onClick={handleDecrement} className='m-2'>-</button>
                         <p className='m-2'>{count}</p>
