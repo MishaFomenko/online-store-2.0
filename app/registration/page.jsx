@@ -68,6 +68,8 @@ export default function SignUp() {
     const newUserData = {
       first: data.get('firstName'),
       last: data.get('lastName'),
+      gender: undefined,
+      date: undefined,
     }
     await registerUser(data.get('email'), data.get('password'), newUserData)
   };

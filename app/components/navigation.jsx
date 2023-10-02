@@ -26,7 +26,7 @@ const auth = getAuth();
 
 
 const pages = ['Home'];
-const settings = ['Profile (coming soon)', 'Logout'];
+const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -59,8 +59,8 @@ function ResponsiveAppBar() {
   };
 
   const handleUserAccount = async (setting) => {
-    if (setting === 'Profile') {
-      // route.push('../profile')
+    if (setting === 'Account') {
+      route.push('../account')
     }
     if (setting === 'Logout') {
       const userCredential =await setPersistence(auth, browserSessionPersistence)

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
 
@@ -42,6 +42,36 @@ export async function POST(req) {
             await setDoc(doc(db, "userdata", userData.uid), userData.newUserData);
             return NextResponse.json()
         };
+    } catch(error) {
+        return NextResponse.json( error )
+    }
+}
+
+export async function PATCH(req) {
+    const newData = await req.json();
+    try {
+        if (newData.field==='First name') {
+            const userRef = doc(db, "userdata", newData.uid);
+            await updateDoc(userRef, {
+                first: newData.newVal,
+            });
+        }   else if (newData.field==='Last name') {
+            const userRef = doc(db, "userdata", newData.uid);
+            await updateDoc(userRef, {
+                last: newData.newVal,
+            });
+        }   else if (newData.field==='Gender') {
+            const userRef = doc(db, "userdata", newData.uid);
+            await updateDoc(userRef, {
+                gender: newData.newVal,
+            });
+        }   else if (newData.field==='Date of birth') {
+            const userRef = doc(db, "userdata", newData.uid);
+            await updateDoc(userRef, {
+                date: newData.newVal,
+            });
+        }
+        return NextResponse.json( 'success' )
     } catch(error) {
         return NextResponse.json( error )
     }

@@ -25,11 +25,12 @@ const db = getFirestore(app);
 
 const UserContext = createContext({});
 export const UserContextProvider = ({children}) => {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
+    const [userData, setUserData] = useState({});
 
 
     return (
-        <UserContext.Provider value={{user, setUser, auth, db}}>
+        <UserContext.Provider value={{user, setUser, userData, setUserData, auth, db}}>
             {children}
         </UserContext.Provider>
     )
