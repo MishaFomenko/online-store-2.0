@@ -13,7 +13,7 @@ import Profile from '../components/profile'
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  const router = useRouter();
+  
 
   return (
     <div
@@ -51,6 +51,7 @@ export default function BasicTabs() {
     const {user, setUser, userData, setUserData} = useUserContext();
     const [dataLoaded, setDataLoaded] = useState(false);
     let prevUser = null;
+    const router = useRouter();
 
     useEffect(()=>{
         if (user===null) {
