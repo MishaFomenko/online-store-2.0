@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -16,7 +14,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 import { setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
-
 
 function Copyright(props) {
   return (
@@ -36,19 +33,19 @@ const defaultTheme = createTheme();
 export default function SignIn() {
 
   const router = useRouter();
-  const {user, setUser, auth} = useUserContext();
+  const { user, setUser, auth } = useUserContext();
 
   const signinUser = async (email, password) => {
-    if (email!=='' && password!=='') {
-        const userCredential = await setPersistence(auth, browserSessionPersistence)
-          .then(async() => {
-            return await signInWithEmailAndPassword(auth, email, password);
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-          });
-        setUser(userCredential.user)
+    if (email !== '' && password !== '') {
+      const userCredential = await setPersistence(auth, browserSessionPersistence)
+        .then(async () => {
+          return await signInWithEmailAndPassword(auth, email, password);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+      setUser(userCredential.user)
     };
   }
 
@@ -58,7 +55,7 @@ export default function SignIn() {
     await signinUser(data.get('email'), data.get('password'))
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     user !== null && router.push('/')
   })
 

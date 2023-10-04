@@ -15,41 +15,41 @@ import Link from 'next/link'
 
 
 export default function ProductsMenu() {
-    const initOpen = {
-        catOpen: false,
-        famOpen: false,
-        fooOpen: false,
-    }
-    const [open, setOpen] = React.useState(initOpen);
+  const initOpen = {
+    catOpen: false,
+    famOpen: false,
+    fooOpen: false,
+  }
+  const [open, setOpen] = React.useState(initOpen);
 
-    const handleCatClick = () => {
-        setOpen(prev => ({...prev, catOpen: !prev.catOpen}));
-    };
-    const handleFamClick = () => {
-        setOpen(prev => ({...prev, famOpen: !prev.famOpen}));
-    };
-    const handleFooClick = () => {
-        setOpen(prev => ({...prev, fooOpen: !prev.fooOpen}));
-    };
+  const handleCatClick = () => {
+    setOpen(prev => ({ ...prev, catOpen: !prev.catOpen }));
+  };
+  const handleFamClick = () => {
+    setOpen(prev => ({ ...prev, famOpen: !prev.famOpen }));
+  };
+  const handleFooClick = () => {
+    setOpen(prev => ({ ...prev, fooOpen: !prev.fooOpen }));
+  };
 
-    const categories = ['Accessories', 'Bags', 'Pants', 'Shoes', 'Hats', 'Beauty', 'Glasses', 'Jackets', 'Jeans', 'Jwewlry', 'Shirts', 'Shorts', 'Underwear', 'Watches'];
-    const family = ['Men', 'Women'];
-    const foods = ['Bakery', 'Beverages', 'Dairy', 'Fruits', 'Meat', 'Seafood', 'Snacks', 'Vegetables'];
+  const categories = ['Accessories', 'Bags', 'Pants', 'Shoes', 'Hats', 'Beauty', 'Glasses', 'Jackets', 'Jeans', 'Jwewlry', 'Shirts', 'Shorts', 'Underwear', 'Watches'];
+  const family = ['Men', 'Women'];
+  const foods = ['Bakery', 'Beverages', 'Dairy', 'Fruits', 'Meat', 'Seafood', 'Snacks', 'Vegetables'];
 
   return (
     <List
-      sx={{ 
-      width: '100%', 
-      maxWidth: 360, 
-      bgcolor: 'background.paper', 
-      position: 'absolute', 
-      color: 'black', 
-      marginTop: '70px', 
-      borderWidth: '2px', 
-      zIndex: 1,
-      overflow: 'auto',
-      maxHeight: 600
-    }}
+      sx={{
+        width: '100%',
+        maxWidth: 360,
+        bgcolor: 'background.paper',
+        position: 'absolute',
+        color: 'black',
+        marginTop: '70px',
+        borderWidth: '2px',
+        zIndex: 1,
+        overflow: 'auto',
+        maxHeight: 600
+      }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -67,16 +67,16 @@ export default function ProductsMenu() {
       </ListItemButton>
       <Collapse in={open.catOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-            {categories.sort().map((item, ind) => 
-              <Link href={`/${item}`} key={ind}>
-                <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemIcon>
-                    <ShortTextIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={item} />
-                </ListItemButton>
-               </Link>
-            )}
+          {categories.sort().map((item, ind) =>
+            <Link href={`/${item}`} key={ind}>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <ShortTextIcon />
+                </ListItemIcon>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </Link>
+          )}
         </List>
       </Collapse>
 
@@ -89,16 +89,16 @@ export default function ProductsMenu() {
       </ListItemButton>
       <Collapse in={open.famOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-            {family.sort().map((item, ind) => 
-              <Link href={`/${item}`} key={ind}>
-                <ListItemButton sx={{ pl: 4 }} key={ind}>
-                    <ListItemIcon>
-                    <ShortTextIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={item} />
-                </ListItemButton>
-              </Link>
-            )}
+          {family.sort().map((item, ind) =>
+            <Link href={`/${item}`} key={ind}>
+              <ListItemButton sx={{ pl: 4 }} key={ind}>
+                <ListItemIcon>
+                  <ShortTextIcon />
+                </ListItemIcon>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </Link>
+          )}
         </List>
       </Collapse>
 
@@ -111,16 +111,16 @@ export default function ProductsMenu() {
       </ListItemButton>
       <Collapse in={open.fooOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-        {foods.sort().map((item, ind) => 
-              <Link href={`/${item}`} key={ind}>
-                <ListItemButton sx={{ pl: 4 }} key={ind}>
-                    <ListItemIcon>
-                    <ShortTextIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={item} />
-                </ListItemButton>
-              </Link>
-            )}
+          {foods.sort().map((item, ind) =>
+            <Link href={`/${item}`} key={ind}>
+              <ListItemButton sx={{ pl: 4 }} key={ind}>
+                <ListItemIcon>
+                  <ShortTextIcon />
+                </ListItemIcon>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </Link>
+          )}
         </List>
       </Collapse>
     </List>

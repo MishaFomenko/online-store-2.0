@@ -37,28 +37,28 @@ const defaultTheme = createTheme();
 export default function SignUp() {
 
   const router = useRouter();
-  const {user, setUser, auth} = useUserContext();
+  const { user, setUser, auth } = useUserContext();
 
   const registerUser = async (email, password, newUserData) => {
-    if (email!=='' && password!=='') {
-        const userCredential = await setPersistence(auth, browserSessionPersistence)
-          .then(async() => {
-            return await createUserWithEmailAndPassword(auth, email, password);
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-          });
-        setUser(userCredential.user)
-        const res = await fetch('../api/userdata', {
-          method: 'POST',
-          'Content-Type': 'application/json',
-          body: JSON.stringify({
-            action: 'register',
-            uid: userCredential.user.uid,
-            newUserData,
-          })
+    if (email !== '' && password !== '') {
+      const userCredential = await setPersistence(auth, browserSessionPersistence)
+        .then(async () => {
+          return await createUserWithEmailAndPassword(auth, email, password);
         })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+      setUser(userCredential.user)
+      const res = await fetch('../api/userdata', {
+        method: 'POST',
+        'Content-Type': 'application/json',
+        body: JSON.stringify({
+          action: 'register',
+          uid: userCredential.user.uid,
+          newUserData,
+        })
+      })
     };
   }
 
@@ -74,10 +74,10 @@ export default function SignUp() {
     await registerUser(data.get('email'), data.get('password'), newUserData)
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     user !== null && router.push('/')
   })
-  
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

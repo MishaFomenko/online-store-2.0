@@ -15,14 +15,14 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 export default function CartIcon() {
-    const {cart, setCartOpen} = useCartContext();
-    const handleCartClick = () => {
-        setCartOpen(prev=>!prev);
-    }
+  const { cart, setCartOpen } = useCartContext();
+  const handleCartClick = () => {
+    setCartOpen(prev => !prev);
+  }
   return (
     <IconButton aria-label="cart" className='mr-10' onClick={handleCartClick}>
       <StyledBadge badgeContent={cart.length} color="secondary">
-        <ShoppingCartIcon sx={{ color: 'white' }}/>
+        <ShoppingCartIcon sx={{ color: 'white' }} />
       </StyledBadge>
     </IconButton>
   );

@@ -38,18 +38,18 @@ const defaultTheme = createTheme();
 export default function PasswordReset() {
 
   const router = useRouter();
-  const {auth} = useUserContext();
+  const { auth } = useUserContext();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     sendPasswordResetEmail(auth, data.get('email'))
-    .then(() => {
-    })
-    .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+      .then(() => {
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
     router.push('/signin')
   };
 

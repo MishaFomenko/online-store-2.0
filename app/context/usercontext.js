@@ -12,8 +12,8 @@ const firebaseConfig = {
     messagingSenderId: "741302016722",
     appId: "1:741302016722:web:5a23b4f35c3cff76c62b0b",
     measurementId: "G-W6DG7SC029"
-  };
-  
+};
+
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
@@ -24,13 +24,13 @@ const db = getFirestore(app);
 
 
 const UserContext = createContext({});
-export const UserContextProvider = ({children}) => {
+export const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [userData, setUserData] = useState({});
 
 
     return (
-        <UserContext.Provider value={{user, setUser, userData, setUserData, auth, db}}>
+        <UserContext.Provider value={{ user, setUser, userData, setUserData, auth, db }}>
             {children}
         </UserContext.Provider>
     )

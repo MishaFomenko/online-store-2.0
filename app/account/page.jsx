@@ -5,15 +5,19 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 import Profile from '../components/profile'
 
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
-
-  
 
   return (
     <div
@@ -32,12 +36,6 @@ function CustomTabPanel(props) {
   );
 }
 
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -46,62 +44,55 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
-    const [value, setValue] = React.useState(0);
-    
-    const {user, setUser, userData, setUserData} = useUserContext();
-    const [dataLoaded, setDataLoaded] = useState(false);
-    let prevUser = null;
-    const router = useRouter();
+  const [currentTab, setCurrentTab] = React.useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const { user, setUser, userData, setUserData } = useUserContext();
+  const router = useRouter();
+  const prevUserRef = useRef(null);
 
-    useEffect(()=>{
-        if (user===null) {
-        try {
-            prevUser = JSON.parse(sessionStorage.getItem('firebase:authUser:AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0:[DEFAULT]'))
-            setUser(prevUser)
-        } catch {}
-        }
+  async function fetchUser(action, collection, document) {
+    const userRes = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
+      method: 'GET',
+      'Content-Type': 'application/json',
     })
-    
+    const userDataNew = await userRes.json();
+    setUserData(userDataNew)
+    setDataLoaded(true)
+  };
 
-    useEffect(()=>{
+  useEffect(() => {
+    if (user === null) {
+      try {
+        prevUserRef.current = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.FIREBASE_API_KEY}:[DEFAULT]`))
+        setUser(prevUserRef.current)
+      } catch { }
+    }
 
-        user===null && prevUser===null && router.push('/registration')
-    },[])
+    user === null && prevUserRef.current === null && router.push('/registration')
 
-    useEffect(()=>{
-       if (user === null && prevUser===null) {
-          router.push('/signin') 
-        } else if (!userData.first && user!==null) {
-
-            async function fetchUser(action, collection, document) {
-                const res = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
-                    method: 'GET',
-                    'Content-Type': 'application/json',
-                })
-                const userD = await res.json();
-                setUserData(userD)
-                setDataLoaded(true)
-            };
-            fetchUser('getuser', 'userdata', user.uid)
-        }
-    })
+    if (user === null && prevUserRef.current === null) {
+      router.push('/signin')
+    } else if (!userData.first && user !== null) {
+      fetchUser('getuser', 'userdata', user.uid)
+    }
+  })
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setCurrentTab(newValue);
   };
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example" >
           <Tab label="Profile" {...a11yProps(0)} />
           <Tab label="Purchases" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={currentTab} index={0}>
         {dataLoaded ? <Profile /> : <></>}
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      <CustomTabPanel value={currentTab} index={1}>
         Nothing here yet
       </CustomTabPanel>
     </Box>

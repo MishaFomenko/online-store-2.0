@@ -31,13 +31,10 @@ const settings = ['Account', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const {user, setUser} = useUserContext();
-  const {cartOpen} = useCartContext();
+  const { user, setUser } = useUserContext();
+  const { cartOpen } = useCartContext();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const router = useRouter();
-
-  
-
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -60,25 +57,25 @@ function ResponsiveAppBar() {
 
   const handleUserAccount = async (setting) => {
     if (setting === 'Account') {
-      route.push('../account')
+      router.push('../account')
     }
     if (setting === 'Logout') {
-      const userCredential =await setPersistence(auth, browserSessionPersistence)
-          .then(async () => {
-            await signOut(auth).then(() => {
-            }).catch((error) => {
-            });
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
+      const userCredential = await setPersistence(auth, browserSessionPersistence)
+        .then(async () => {
+          await signOut(auth).then(() => {
+          }).catch((error) => {
           });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
       setUser(null)
       router.push('/signin')
     }
   }
   const handleMenuClick = () => {
-    setMenuOpen(prev=>!prev);
+    setMenuOpen(prev => !prev);
   }
 
 
@@ -86,46 +83,46 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       {menuOpen ? <ProductsMenu /> : <></>}
       {cartOpen ? <CartCard /> : <></>}
-      
+
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {user !== null 
-          ? 
-          <>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={handleMenuClick}
-          >
-            <MenuIcon />
-          </IconButton>
-          
-          </>
-          
-          :
-          <>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-          </>
+          {user !== null
+            ?
+            <>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={handleMenuClick}
+              >
+                <MenuIcon />
+              </IconButton>
+
+            </>
+
+            :
+            <>
+              <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                LOGO
+              </Typography>
+            </>
           }
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -137,7 +134,7 @@ function ResponsiveAppBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              
+
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -183,56 +180,56 @@ function ResponsiveAppBar() {
           >
             LOGO
           </Typography>
-          
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {user !== null && pages.map((page) => (
               <Button
                 key={page}
-                onClick={()=>(handleCloseNavMenu(), handleHome())}
+                onClick={() => (handleCloseNavMenu(), handleHome())}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
               </Button>
             ))}
             {user !== null ? <div className='w-full flex justify-center'><SearchBar /></div> : <></>}
-            
+
           </Box>
-            {user !== null && 
-              <Box sx={{ flexGrow: 0 }}>
-                <CartIcon />
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="" src="" />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: '45px' }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={()=>(
-                      handleCloseUserMenu, 
-                      handleUserAccount(setting)
-                      )}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            }
-          
+          {user !== null &&
+            <Box sx={{ flexGrow: 0 }}>
+              <CartIcon />
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="" src="" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={() => (
+                    handleCloseUserMenu,
+                    handleUserAccount(setting)
+                  )}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          }
+
         </Toolbar>
       </Container>
     </AppBar>

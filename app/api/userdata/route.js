@@ -12,8 +12,8 @@ const firebaseConfig = {
     messagingSenderId: "741302016722",
     appId: "1:741302016722:web:5a23b4f35c3cff76c62b0b",
     measurementId: "G-W6DG7SC029"
-  };
-  
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -27,52 +27,52 @@ export async function GET(req) {
             const docRef = doc(db, collection, document);
             const docSnap = await getDoc(docRef);
             const userData = docSnap.data();
-            return NextResponse.json( userData )
+            return NextResponse.json(userData)
         }
-        
-    } catch(error) {
-        return NextResponse.json( error )
-    }       
+
+    } catch (error) {
+        return NextResponse.json(error)
+    }
 }
 
 export async function POST(req) {
     const userData = await req.json();
     try {
-        if (userData.action==="register") {
+        if (userData.action === "register") {
             await setDoc(doc(db, "userdata", userData.uid), userData.newUserData);
             return NextResponse.json()
         };
-    } catch(error) {
-        return NextResponse.json( error )
+    } catch (error) {
+        return NextResponse.json(error)
     }
 }
 
 export async function PATCH(req) {
     const newData = await req.json();
     try {
-        if (newData.field==='First name') {
+        if (newData.field === 'First name') {
             const userRef = doc(db, "userdata", newData.uid);
             await updateDoc(userRef, {
                 first: newData.newVal,
             });
-        }   else if (newData.field==='Last name') {
+        } else if (newData.field === 'Last name') {
             const userRef = doc(db, "userdata", newData.uid);
             await updateDoc(userRef, {
                 last: newData.newVal,
             });
-        }   else if (newData.field==='Gender') {
+        } else if (newData.field === 'Gender') {
             const userRef = doc(db, "userdata", newData.uid);
             await updateDoc(userRef, {
                 gender: newData.newVal,
             });
-        }   else if (newData.field==='Date of birth') {
+        } else if (newData.field === 'Date of birth') {
             const userRef = doc(db, "userdata", newData.uid);
             await updateDoc(userRef, {
                 date: newData.newVal,
             });
         }
-        return NextResponse.json( 'success' )
-    } catch(error) {
-        return NextResponse.json( error )
+        return NextResponse.json('success')
+    } catch (error) {
+        return NextResponse.json(error)
     }
 }

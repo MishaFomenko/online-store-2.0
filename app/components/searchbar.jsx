@@ -20,7 +20,7 @@ export default function SearchBar() {
   return (
     <Paper
       component="form"
-      onSubmit={e=>handleSubmit(e)}
+      onSubmit={e => handleSubmit(e)}
       sx={{ p: '2px 4px', m: '10px 0px', display: 'flex', alignItems: 'center', width: 300 }}
     >
       <InputBase
@@ -30,7 +30,7 @@ export default function SearchBar() {
         name='keyword'
         id='keyword'
         value={kw}
-        onChange={e=>handleChange(e)}
+        onChange={e => handleChange(e)}
       />
       <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
         <SearchIcon />

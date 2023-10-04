@@ -5,18 +5,16 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import {useState, useEffect} from 'react'
-import {useCartContext} from '../context/cartcontext'
+import { useState, useEffect } from 'react'
+import { useCartContext } from '../context/cartcontext'
 import Image from 'next/image'
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function CheckOutForm() {
 
   const stripe = useStripe();
   const elements = useElements();
-
-  const {cart, setCart, setCartOpen} = useCartContext();
-
+  const { cart, setCart } = useCartContext();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,21 +35,21 @@ export default function CheckOutForm() {
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       if (paymentIntent) {
         switch (paymentIntent.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
+          case "succeeded":
+            setMessage("Payment succeeded!");
+            break;
+          case "processing":
+            setMessage("Your payment is processing.");
+            break;
+          case "requires_payment_method":
+            setMessage("Your payment was not successful, please try again.");
+            break;
+          default:
+            setMessage("Something went wrong.");
+            break;
+        }
       }
-      }
-      
+
     });
   }, [stripe]);
 
@@ -93,48 +91,48 @@ export default function CheckOutForm() {
   };
 
   // const {cartList,dispatch} = useCartContext();
-  
-    const route = useRouter();
 
-    // }
-    const handleIncreaseAmount = (product) => {
-      const newCart = [...cart];
-      const ind = newCart.findIndex(item=>item.asin===product.asin);
-      newCart[ind].quantity++;
-      setCart(newCart);
+  const route = useRouter();
+
+  // }
+  const handleIncreaseAmount = (product) => {
+    const newCart = [...cart];
+    const ind = newCart.findIndex(item => item.asin === product.asin);
+    newCart[ind].quantity++;
+    setCart(newCart);
   }
-    const handleDecreaseAmount = (product) => {
-        const newCart = [...cart];
-        const ind = newCart.findIndex(item=>item.asin===product.asin);
-        newCart[ind].quantity--;
-        setCart(newCart);
-    }
-    const handleDeleteFromCart = (product) => {
-        const newCart = [...cart];
-        const clearCart = newCart.filter(item=>item.asin!==product.asin);
-        setCart(clearCart);
-    }
+  const handleDecreaseAmount = (product) => {
+    const newCart = [...cart];
+    const ind = newCart.findIndex(item => item.asin === product.asin);
+    newCart[ind].quantity--;
+    setCart(newCart);
+  }
+  const handleDeleteFromCart = (product) => {
+    const newCart = [...cart];
+    const clearCart = newCart.filter(item => item.asin !== product.asin);
+    setCart(clearCart);
+  }
 
 
-    const total = cart.reduce((acc, curr)=>acc+curr.price*curr.quantity,0);
-    const checkoutList = cart.map((product ,ind)=>  
-      <div key={ind} className='w-screen h-96 flex'>
-        
-        <div className='w-1/3 h-full flex justify-center relative m-2'>
-            <Image src={product.imgUrl} alt='product image' fill={true} objectFit="cover" objectPosition="center"/>
+  const total = cart.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
+  const checkoutList = cart.map((product, ind) =>
+    <div key={ind} className='w-screen h-96 flex'>
+
+      <div className='w-1/3 h-full flex justify-center relative m-2'>
+        <Image src={product.imgUrl} alt='product image' fill={true} objectFit="cover" objectPosition="center" />
+      </div>
+      <div className='flex flex-col justify-center pl-4'>
+        <p className='ml-2 text-sm sm:text-2xl'>{product.productDescription}</p>
+        <div className='flex pl-2'>
+          <button onClick={() => handleDecreaseAmount(product)} className="text-sm sm:text-2xl border-2 border-black rounded-lg px-2">-</button>
+          <p className='m-2 text-sm sm:text-2xl'>Quantity: {product.quantity}</p>
+          <button onClick={() => handleIncreaseAmount(product)} className="text-sm sm:text-2xl border-2 border-black rounded-lg px-2">+</button>
         </div>
-        <div className='flex flex-col justify-center pl-4'>
-          <p className='ml-2 text-sm sm:text-2xl'>{product.productDescription}</p>
-          <div className='flex pl-2'>
-            <button onClick={()=>handleDecreaseAmount(product)} className="text-sm sm:text-2xl border-2 border-black rounded-lg px-2">-</button>
-            <p className='m-2 text-sm sm:text-2xl'>Quantity: {product.quantity}</p>
-            <button onClick={()=>handleIncreaseAmount(product)} className="text-sm sm:text-2xl border-2 border-black rounded-lg px-2">+</button>
-          </div>
-          <p className='m-2 text-sm sm:text-2xl'>Price: {product.quantity*product.price}$</p>
-        </div>
-      </div>  
-         
-      )
+        <p className='m-2 text-sm sm:text-2xl'>Price: {product.quantity * product.price}$</p>
+      </div>
+    </div>
+
+  )
   return (
     <div className='pb-16'>
       <p className='m-6 fixed right-0 text-3xl'>Total: {total}$</p>
