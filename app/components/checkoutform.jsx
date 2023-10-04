@@ -90,11 +90,8 @@ export default function CheckOutForm() {
     layout: "tabs",
   };
 
-  // const {cartList,dispatch} = useCartContext();
+  const router = useRouter();
 
-  const route = useRouter();
-
-  // }
   const handleIncreaseAmount = (product) => {
     const newCart = [...cart];
     const ind = newCart.findIndex(item => item.asin === product.asin);
@@ -142,6 +139,7 @@ export default function CheckOutForm() {
           id="link-authentication-element"
           onChange={(e) => setEmail(e.value)}
         />
+        <p className='m-3 p-2 border-4 border-red-400 text-red-400'>{`NOTE: for the 'Card number' use`} <b>4242 4242 4242 4242</b></p>
         <PaymentElement id="payment-element" options={paymentElementOptions} />
         <button disabled={isLoading || !stripe || !elements} id="submit" className='rounded bg-cyan-500 p-3 my-4 w-full text-white hover:bg-cyan-200 hover:text-cyan-600 border-2 hover:border-cyan-600 transition duration-500'>
           <span id="button-text">

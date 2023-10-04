@@ -14,16 +14,9 @@ export default function ProductPage() {
     const product = JSON.parse(data);
     const router = useRouter();
     const { user, setUser } = useUserContext();
-    const prevUserRef = useRef(null);
 
     useEffect(() => {
-        if (user === null) {
-            try {
-                prevUserRef.current = JSON.parse(sessionStorage.getItem('firebase:authUser:AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0:[DEFAULT]'))
-                setUser(prevUserRef.current)
-            } catch { }
-        }
-        user === null && prevUserRef.current === null && router.push('/registration')
+        user === null && router.push('/registration')
     })
 
     const handleDecrement = () => {
@@ -72,10 +65,7 @@ export default function ProductPage() {
                             <button onClick={handleIncrement} className='m-2'>+</button>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
         </>
     )

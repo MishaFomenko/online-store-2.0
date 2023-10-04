@@ -2,7 +2,7 @@
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0",
@@ -20,14 +20,20 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-
-
-
 const UserContext = createContext({});
+
 export const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [userData, setUserData] = useState({});
 
+    useEffect(() => {
+        if (user === null) {
+            const prevUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}:[DEFAULT]`))
+            if (prevUser !== null) {
+                setUser(prevUser)
+            }
+        }
+    }, [user])
 
     return (
         <UserContext.Provider value={{ user, setUser, userData, setUserData, auth, db }}>

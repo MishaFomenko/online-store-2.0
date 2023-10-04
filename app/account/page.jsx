@@ -5,10 +5,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 import Profile from '../components/profile'
+import { customGetter } from '../utils/fetchConstructor'
 
 CustomTabPanel.propTypes = {
   children: PropTypes.node,
@@ -46,34 +47,24 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const { user, setUser, userData, setUserData } = useUserContext();
+  const { user, userData, setUserData } = useUserContext();
   const router = useRouter();
-  const prevUserRef = useRef(null);
 
-  async function fetchUser(action, collection, document) {
-    const userRes = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
-      method: 'GET',
-      'Content-Type': 'application/json',
-    })
-    const userDataNew = await userRes.json();
-    setUserData(userDataNew)
+  async function fetchUser() {
+    const fetchUserPath = '../api/userdata';
+    const action = 'getuser';
+    const collection = 'userdata';
+    const document = user.uid.toString();
+    const userRes = await customGetter(fetchUserPath, action, collection, document);
+    setUserData(userRes)
     setDataLoaded(true)
   };
 
   useEffect(() => {
     if (user === null) {
-      try {
-        prevUserRef.current = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.FIREBASE_API_KEY}:[DEFAULT]`))
-        setUser(prevUserRef.current)
-      } catch { }
-    }
-
-    user === null && prevUserRef.current === null && router.push('/registration')
-
-    if (user === null && prevUserRef.current === null) {
       router.push('/signin')
     } else if (!userData.first && user !== null) {
-      fetchUser('getuser', 'userdata', user.uid)
+      fetchUser()
     }
   })
 

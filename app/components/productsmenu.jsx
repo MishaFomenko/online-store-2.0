@@ -13,7 +13,6 @@ import FastfoodIcon from '@mui/icons-material/Fastfood';
 import ShortTextIcon from '@mui/icons-material/ShortText';
 import Link from 'next/link'
 
-
 export default function ProductsMenu() {
   const initOpen = {
     catOpen: false,

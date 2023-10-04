@@ -15,9 +15,6 @@ import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 import { sendPasswordResetEmail } from "firebase/auth";
 
-
-
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -33,10 +30,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-
-
 export default function PasswordReset() {
-
   const router = useRouter();
   const { auth } = useUserContext();
 

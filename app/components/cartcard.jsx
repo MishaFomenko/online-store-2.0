@@ -2,9 +2,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCartContext } from '../context/cartcontext'
 
-
-
-
 export default function CartCard() {
     const { cart, setCart, setCartOpen } = useCartContext();
 
@@ -54,8 +51,6 @@ export default function CartCard() {
                 ||
                 <p className='m-24 text-gray-200 text-3xl'>The cart is empty</p>
             }
-
-
         </div>
     )
 }

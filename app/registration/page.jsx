@@ -17,8 +17,6 @@ import { useUserContext } from '../context/usercontext'
 import { useRouter } from 'next/navigation'
 import { setPersistence, createUserWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 
-
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -77,7 +75,6 @@ export default function SignUp() {
   React.useEffect(() => {
     user !== null && router.push('/')
   })
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -142,16 +139,12 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                /> */}
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
-              variant="outlined" //"contained"
+              variant="outlined"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up

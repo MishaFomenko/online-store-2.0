@@ -4,12 +4,9 @@ import { getDocs, getDoc, doc, collection, query, where } from "firebase/firesto
 import { getFirestore } from "firebase/firestore";
 const algoliasearch = require('algoliasearch')
 
-
 const ALGOLIA_INDEX_NAME = 'products';
 const client = algoliasearch(process.env.ALGOLIA_ID, process.env.ALGOLIA_ADMIN_KEY);
 const index = client.initIndex(ALGOLIA_INDEX_NAME);
-
-
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -100,7 +97,4 @@ export async function GET(req) {
     } catch (error) {
         return NextResponse.json(error)
     }
-
-
-
 }

@@ -98,14 +98,10 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <Button
               type="submit"
               fullWidth
-              variant="outlined" //"contained"
+              variant="outlined"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In

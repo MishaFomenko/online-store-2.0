@@ -5,7 +5,6 @@ import ResponsiveAppBar from './components/navigation'
 import { UserContextProvider } from './context/usercontext'
 import { CartContextProvider } from './context/cartcontext'
 
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -27,8 +26,8 @@ export default function RootLayout({
             {children}
           </CartContextProvider>
         </UserContextProvider>
-        
-        </body>
+
+      </body>
     </html>
   )
 }

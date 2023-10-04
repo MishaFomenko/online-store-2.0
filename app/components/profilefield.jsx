@@ -30,31 +30,35 @@ export default function ProfileField({ field }) {
   }
   const [newVal, setNewVal] = useState(text === undefined ? 'empty' : text);
 
+  async function fetchUser(action, collection, document) {
+    const userRes = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const userDataNew = await userRes.json();
+    setUserData(userDataNew)
+  };
+
+  async function editUserData() {
+    const test = await fetch('../api/userdata', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        field,
+        newVal,
+        uid: user.uid,
+      })
+    })
+    const testText = await test.json();
+    console.log(testText)
+    await fetchUser('getuser', 'userdata', user.uid)
+  }
+
   const handleSave = () => {
-    async function fetchUser(action, collection, document) {
-      const userRes = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      const userDataNew = await userRes.json();
-      setUserData(userDataNew)
-    };
-    async function editUserData() {
-      await fetch('../api/userdata', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          field,
-          newVal,
-          uid: user.uid,
-        })
-      })
-      await fetchUser('getuser', 'userdata', user.uid)
-    }
     if (text !== newVal) {
       editUserData()
     }

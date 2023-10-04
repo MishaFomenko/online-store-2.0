@@ -2,9 +2,6 @@
 import ProductCard from './productcard'
 import { useEffect, useState } from 'react'
 
-
-
-
 export default function Shop() {
     const [bs, setBs] = useState([]);
     const fetchBests = async (action) => {
@@ -20,7 +17,6 @@ export default function Shop() {
         const bests = await fetchBests('homepage')
         setBs(bests);
     };
-
 
     useEffect(() => {
         if (bs.length === 0) {

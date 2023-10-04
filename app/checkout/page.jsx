@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useRouter } from 'next/navigation'
 import { useUserContext } from '../context/usercontext'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import CheckoutForm from "../components/checkoutform";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
@@ -12,17 +12,10 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 export default function CheckOutPage() {
   const [clientSecret, setClientSecret] = React.useState("");
   const router = useRouter();
-  const { user, setUser } = useUserContext();
-  const prevUserRef = useRef(null);
+  const { user } = useUserContext();
 
   useEffect(() => {
-    if (user === null) {
-      try {
-        prevUserRef.current = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.FIREBASE_API_KEY}:[DEFAULT]`))
-        setUser(prevUserRef.current)
-      } catch { }
-    }
-    user === null && prevUserRef.current === null && router.push('/registration')
+    user === null && router.push('/registration')
 
     fetch("/api/create-payment-intent", {
       method: "POST",

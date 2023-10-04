@@ -24,7 +24,6 @@ import CartIcon from './carticon'
 
 const auth = getAuth();
 
-
 const pages = ['Home'];
 const settings = ['Account', 'Logout'];
 
@@ -77,7 +76,6 @@ function ResponsiveAppBar() {
   const handleMenuClick = () => {
     setMenuOpen(prev => !prev);
   }
-
 
   return (
     <AppBar position="static">

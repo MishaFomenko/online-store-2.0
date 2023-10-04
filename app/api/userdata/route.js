@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server'
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
-
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "onlinestore-2.firebaseapp.com",
@@ -71,8 +70,8 @@ export async function PATCH(req) {
                 date: newData.newVal,
             });
         }
-        return NextResponse.json('success')
+        return NextResponse.json('success', { status: 200 })
     } catch (error) {
-        return NextResponse.json(error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
