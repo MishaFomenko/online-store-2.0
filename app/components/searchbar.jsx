@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 export default function SearchBar() {
   const [kw, setKw] = React.useState('');
   const route = useRouter();
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget);

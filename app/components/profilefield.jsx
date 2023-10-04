@@ -11,7 +11,7 @@ import { useState } from 'react'
 export default function ProfileField({ field }) {
   const { userData, setUserData, user } = useUserContext();
   const [edit, setEdit] = useState(false);
-  let text;
+  let text
   switch (field) {
     case 'First name':
       text = userData.first;

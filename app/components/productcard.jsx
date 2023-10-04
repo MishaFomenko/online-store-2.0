@@ -13,7 +13,7 @@ export default function ProductCard({ item }) {
   const handleProductClick = (item) => {
     const serItem = JSON.stringify(item);
     const encodedItem = encodeURIComponent(serItem);
-    router.push(`/products/${item.asin}?data=${encodedItem}`);
+    router.push(`/products/${item.asin}?data=${encodedItem}`)
   }
 
   return (

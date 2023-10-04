@@ -19,7 +19,7 @@ export default function ProductsMenu() {
     famOpen: false,
     fooOpen: false,
   }
-  const [open, setOpen] = React.useState(initOpen);
+  const [open, setOpen] = React.useState(initOpen)
 
   const handleCatClick = () => {
     setOpen(prev => ({ ...prev, catOpen: !prev.catOpen }));

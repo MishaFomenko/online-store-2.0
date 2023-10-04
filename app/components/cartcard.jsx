@@ -4,7 +4,6 @@ import { useCartContext } from '../context/cartContext'
 
 export default function CartCard() {
     const { cart, setCart, setCartOpen } = useCartContext();
-
     const router = useRouter();
 
     const handleIncreaseAmount = (product) => {

@@ -17,7 +17,7 @@ export default function CheckOutForm() {
   const { cart, setCart } = useCartContext();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (!stripe) {
