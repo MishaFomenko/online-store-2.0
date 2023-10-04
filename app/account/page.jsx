@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react'
-import { useUserContext } from '../context/usercontext'
+import { useUserContext } from '../context/userContext'
 import { useRouter } from 'next/navigation'
 import Profile from '../components/profile'
 import { customGetter } from '../utils/fetchConstructor'

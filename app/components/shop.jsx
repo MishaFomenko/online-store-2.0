@@ -1,5 +1,5 @@
 'use client'
-import ProductCard from './productcard'
+import ProductCard from './productCard'
 import { useEffect, useState } from 'react'
 
 export default function Shop() {

@@ -1,4 +1,4 @@
-import ProfileField from './profilefield'
+import ProfileField from './profileField'
 
 export default function Profile() {
     const fields = ["First name", "Last name", "Gender", "Date of birth"];

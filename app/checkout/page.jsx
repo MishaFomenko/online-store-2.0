@@ -3,9 +3,9 @@ import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useRouter } from 'next/navigation'
-import { useUserContext } from '../context/usercontext'
+import { useUserContext } from '../context/userContext'
 import { useEffect } from 'react'
-import CheckoutForm from "../components/checkoutform";
+import CheckoutForm from "../components/checkOutForm";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 

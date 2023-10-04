@@ -14,13 +14,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useRouter } from 'next/navigation';
-import { useUserContext } from '../context/usercontext';
-import { useCartContext } from '../context/cartcontext';
-import ProductsMenu from './productsmenu';
-import CartCard from './cartcard';
-import SearchBar from './searchbar'
+import { useUserContext } from '../context/userContext';
+import { useCartContext } from '../context/cartContext';
+import ProductsMenu from './productsMenu';
+import CartCard from './cartCard';
+import SearchBar from './searchBar'
 import { getAuth, signOut, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
-import CartIcon from './carticon'
+import CartIcon from './cartIcon'
 
 const auth = getAuth();
 

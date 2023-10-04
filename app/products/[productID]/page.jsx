@@ -2,8 +2,8 @@
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
-import { useCartContext } from '../../context/cartcontext';
-import { useUserContext } from '../../context/usercontext'
+import { useCartContext } from '../../context/cartContext';
+import { useUserContext } from '../../context/userContext'
 import { useRouter } from 'next/navigation'
 
 export default function ProductPage() {

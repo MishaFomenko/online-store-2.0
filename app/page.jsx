@@ -1,6 +1,6 @@
 'use client'
 import Shop from './components/shop'
-import { useUserContext } from './context/usercontext'
+import { useUserContext } from './context/userContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 

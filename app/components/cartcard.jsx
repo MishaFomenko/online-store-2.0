@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCartContext } from '../context/cartcontext'
+import { useCartContext } from '../context/cartContext'
 
 export default function CartCard() {
     const { cart, setCart, setCartOpen } = useCartContext();

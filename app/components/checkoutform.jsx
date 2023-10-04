@@ -6,7 +6,7 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 import { useState, useEffect } from 'react'
-import { useCartContext } from '../context/cartcontext'
+import { useCartContext } from '../context/cartContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 

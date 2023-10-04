@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import ProductCard from '../components/productcard'
 import { useRouter } from 'next/navigation'
-import { useUserContext } from '../context/usercontext'
+import { useUserContext } from '../context/userContext'
 import { customGetter } from '../utils/fetchConstructor'
 
 export default function Page({ params }) {
