@@ -52,7 +52,7 @@ export default function BasicTabs() {
   const fetchUserPath = '../api/userData';
   const action = 'getuser';
   const collection = 'userdata';
-  const document = user.uid.toString();
+  const document = user.uid.toString() || null;
   const requestPath = `${fetchUserPath}?action=${action}&collection=${collection}&document=${document}`
   const { data, error, isLoading } = useSWR(requestPath, customGetter);
   useEffect(() => {
