@@ -11,6 +11,7 @@ export default function Page({ params }) {
     const router = useRouter();
     const { user } = useUserContext();
 
+
     useEffect(() => {
         user === null && router.push('/registration')
     })

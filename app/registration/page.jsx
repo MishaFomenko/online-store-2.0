@@ -35,6 +35,7 @@ export default function SignUp() {
   const router = useRouter();
   const { user, setUser, auth } = useUserContext();
 
+
   const registerUser = async (email, password, newUserData) => {
     if (email !== '' && password !== '') {
       const userCredential = await setPersistence(auth, browserSessionPersistence)
