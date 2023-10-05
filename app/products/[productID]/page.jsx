@@ -17,7 +17,7 @@ export default function ProductPage() {
 
     useEffect(() => {
         user === null && router.push('/registration')
-    })
+    }, [user, router])
 
     const handleDecrement = () => {
         count > 1 && setCount(prev => prev - 1);

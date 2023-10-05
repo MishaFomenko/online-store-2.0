@@ -11,10 +11,9 @@ export default function Page({ params }) {
     const router = useRouter();
     const { user } = useUserContext();
 
-
     useEffect(() => {
         user === null && router.push('/registration')
-    })
+    }, [user, router])
 
     const prodsByCatPath = './api/products';
     const action = 'categorypage';

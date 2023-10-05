@@ -13,6 +13,7 @@ import { customGetter } from '../utils/fetchConstructor';
 export default function ProfileField({ field }) {
   const { userData, setUserData, user } = useUserContext();
   const [edit, setEdit] = useState(false);
+
   let text;
   switch (field) {
     case 'First name':

@@ -56,6 +56,7 @@ export default function BasicTabs() {
   const requestPath = `${fetchUserPath}?action=${action}&collection=${collection}&document=${document}`
   const { data, error, isLoading } = useSWR(requestPath, customGetter);
   useEffect(() => {
+
     if (user === null) {
       router.push('/signin')
     }

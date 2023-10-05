@@ -12,7 +12,7 @@ export default function Page({ params }) {
 
     useEffect(() => {
         user === null && router.push('/registration')
-    })
+    }, [router, user])
 
     const handleProdsByKw = async () => {
         const prodsByKwPath = '../api/products';

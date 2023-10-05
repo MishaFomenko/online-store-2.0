@@ -23,11 +23,17 @@ const db = getFirestore(app);
 const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-
-    const prevUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}:[DEFAULT]`));
+    let prevUser;
+    try {
+        prevUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}:[DEFAULT]`));
+    } catch (error) {
+        console.log(error)
+    }
 
     const [user, setUser] = useState(prevUser);
     const [userData, setUserData] = useState({});
+
+
 
     return (
         <UserContext.Provider value={{ user, setUser, userData, setUserData, auth, db }}>

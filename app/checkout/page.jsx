@@ -25,7 +25,7 @@ export default function CheckOutPage() {
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret))
       .catch((err) => console.log(err))
-  });
+  }, [user, router]);
 
   const appearance = {
     theme: 'stripe',
