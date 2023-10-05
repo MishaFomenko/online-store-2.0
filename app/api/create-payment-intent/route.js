@@ -1,4 +1,4 @@
-import {NextResponse} from 'next/server'
+import { NextResponse } from 'next/server'
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -22,8 +22,7 @@ export async function POST(req) {
     },
   });
 
-  return NextResponse.json( {
+  return NextResponse.json({
     clientSecret: paymentIntent.client_secret,
-  } )
-
+  }, { status: 200 })
 };

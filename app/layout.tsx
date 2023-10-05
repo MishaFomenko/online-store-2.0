@@ -2,9 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import ResponsiveAppBar from './components/navigation'
-import { UserContextProvider } from './context/usercontext'
-import { CartContextProvider } from './context/cartcontext'
-
+import { UserContextProvider } from './context/userContext'
+import { CartContextProvider } from './context/cartContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,8 +26,8 @@ export default function RootLayout({
             {children}
           </CartContextProvider>
         </UserContextProvider>
-        
-        </body>
+
+      </body>
     </html>
   )
 }

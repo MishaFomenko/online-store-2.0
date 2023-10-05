@@ -11,12 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useUserContext } from '../context/usercontext'
+import { useUserContext } from '../context/userContext'
 import { useRouter } from 'next/navigation'
 import { sendPasswordResetEmail } from "firebase/auth";
-
-
-
 
 function Copyright(props) {
   return (
@@ -33,23 +30,22 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-
-
 export default function PasswordReset() {
-
   const router = useRouter();
-  const {auth} = useUserContext();
+  const { auth } = useUserContext();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     sendPasswordResetEmail(auth, data.get('email'))
-    .then(() => {
-    })
-    .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+      .then(() => {
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
+      });
     router.push('/signin')
   };
 

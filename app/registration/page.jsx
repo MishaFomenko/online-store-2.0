@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,11 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useUserContext } from '../context/usercontext'
+import { useUserContext } from '../context/userContext'
 import { useRouter } from 'next/navigation'
 import { setPersistence, createUserWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
-
-
 
 function Copyright(props) {
   return (
@@ -37,28 +33,30 @@ const defaultTheme = createTheme();
 export default function SignUp() {
 
   const router = useRouter();
-  const {user, setUser, auth} = useUserContext();
+  const { user, setUser, auth } = useUserContext();
 
   const registerUser = async (email, password, newUserData) => {
-    if (email!=='' && password!=='') {
-        const userCredential = await setPersistence(auth, browserSessionPersistence)
-          .then(async() => {
-            return await createUserWithEmailAndPassword(auth, email, password);
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-          });
-        setUser(userCredential.user)
-        const res = await fetch('../api/userdata', {
-          method: 'POST',
-          'Content-Type': 'application/json',
-          body: JSON.stringify({
-            action: 'register',
-            uid: userCredential.user.uid,
-            newUserData,
-          })
+    if (email !== '' && password !== '') {
+      const userCredential = await setPersistence(auth, browserSessionPersistence)
+        .then(async () => {
+          return await createUserWithEmailAndPassword(auth, email, password);
         })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode)
+          console.log(errorMessage)
+        });
+      setUser(userCredential.user)
+      const res = await fetch('../api/userdata', {
+        method: 'POST',
+        'Content-Type': 'application/json',
+        body: JSON.stringify({
+          action: 'register',
+          uid: userCredential.user.uid,
+          newUserData,
+        })
+      })
     };
   }
 
@@ -68,14 +66,15 @@ export default function SignUp() {
     const newUserData = {
       first: data.get('firstName'),
       last: data.get('lastName'),
+      gender: undefined,
+      date: undefined,
     }
     await registerUser(data.get('email'), data.get('password'), newUserData)
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     user !== null && router.push('/')
   })
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -140,16 +139,12 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                /> */}
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
-              variant="outlined" //"contained"
+              variant="outlined"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up

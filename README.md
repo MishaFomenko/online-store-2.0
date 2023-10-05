@@ -2,7 +2,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## The app is deployed at: 
 [online-store-2-0.vercel.app](https://online-store-2-0.vercel.app/registration)
-
 ## Getting Started
 
 First, run the development server:
