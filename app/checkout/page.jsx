@@ -23,7 +23,8 @@ export default function CheckOutPage() {
       body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
     })
       .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
+      .then((data) => setClientSecret(data.clientSecret))
+      .catch((err) => console.log(err))
   });
 
   const appearance = {

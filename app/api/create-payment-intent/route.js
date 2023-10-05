@@ -24,5 +24,5 @@ export async function POST(req) {
 
   return NextResponse.json({
     clientSecret: paymentIntent.client_secret,
-  })
+  }, { status: 200 })
 };

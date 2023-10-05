@@ -5,11 +5,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useUserContext } from '../context/userContext'
 import { useRouter } from 'next/navigation'
 import Profile from '../components/profile'
 import { customGetter } from '../utils/fetchConstructor'
+import useSWR from 'swr'
 
 CustomTabPanel.propTypes = {
   children: PropTypes.node,
@@ -46,25 +47,21 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const [currentTab, setCurrentTab] = React.useState(0);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const { user, userData, setUserData } = useUserContext();
   const router = useRouter();
 
-  async function fetchUser() {
-    const fetchUserPath = '../api/userdata';
-    const action = 'getuser';
-    const collection = 'userdata';
-    const document = user.uid.toString();
-    const userRes = await customGetter(fetchUserPath, action, collection, document);
-    setUserData(userRes)
-    setDataLoaded(true)
-  };
-
+  const fetchUserPath = '../api/userData';
+  const action = 'getuser';
+  const collection = 'userdata';
+  const document = user.uid.toString();
+  const requestPath = `${fetchUserPath}?action=${action}&collection=${collection}&document=${document}`
+  const { data, error, isLoading } = useSWR(requestPath, customGetter);
   useEffect(() => {
     if (user === null) {
       router.push('/signin')
-    } else if (!userData.first && user !== null) {
-      fetchUser()
+    }
+    if (!isLoading) {
+      setUserData(data)
     }
   })
 
@@ -81,7 +78,7 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={currentTab} index={0}>
-        {dataLoaded ? <Profile /> : <></>}
+        {userData.first ? <Profile /> : <></>}
       </CustomTabPanel>
       <CustomTabPanel value={currentTab} index={1}>
         Nothing here yet

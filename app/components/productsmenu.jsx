@@ -14,21 +14,18 @@ import ShortTextIcon from '@mui/icons-material/ShortText';
 import Link from 'next/link'
 
 export default function ProductsMenu() {
-  const initOpen = {
-    catOpen: false,
-    famOpen: false,
-    fooOpen: false,
-  }
-  const [open, setOpen] = React.useState(initOpen)
+  const [catOpen, setCatOpen] = React.useState(false)
+  const [famOpen, setFamOpen] = React.useState(false)
+  const [foodOpen, setFoodOpen] = React.useState(false)
 
   const handleCatClick = () => {
-    setOpen(prev => ({ ...prev, catOpen: !prev.catOpen }));
+    setCatOpen(prev => (!prev));
   };
   const handleFamClick = () => {
-    setOpen(prev => ({ ...prev, famOpen: !prev.famOpen }));
+    setFamOpen(prev => (!prev));
   };
-  const handleFooClick = () => {
-    setOpen(prev => ({ ...prev, fooOpen: !prev.fooOpen }));
+  const handleFoodClick = () => {
+    setFoodOpen(prev => (!prev));
   };
 
   const categories = ['Accessories', 'Bags', 'Pants', 'Shoes', 'Hats', 'Beauty', 'Glasses', 'Jackets', 'Jeans', 'Jwewlry', 'Shirts', 'Shorts', 'Underwear', 'Watches'];
@@ -62,9 +59,9 @@ export default function ProductsMenu() {
           <CheckroomIcon />
         </ListItemIcon>
         <ListItemText primary="Categories" />
-        {open.catOpen ? <ExpandLess /> : <ExpandMore />}
+        {catOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open.catOpen} timeout="auto" unmountOnExit>
+      <Collapse in={catOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {categories.sort().map((item, ind) =>
             <Link href={`/${item}`} key={ind}>
@@ -84,9 +81,9 @@ export default function ProductsMenu() {
           <FamilyRestroomIcon />
         </ListItemIcon>
         <ListItemText primary="Family" />
-        {open.famOpen ? <ExpandLess /> : <ExpandMore />}
+        {famOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open.famOpen} timeout="auto" unmountOnExit>
+      <Collapse in={famOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {family.sort().map((item, ind) =>
             <Link href={`/${item}`} key={ind}>
@@ -101,14 +98,14 @@ export default function ProductsMenu() {
         </List>
       </Collapse>
 
-      <ListItemButton onClick={handleFooClick}>
+      <ListItemButton onClick={handleFoodClick}>
         <ListItemIcon>
           <FastfoodIcon />
         </ListItemIcon>
         <ListItemText primary="Foods" />
-        {open.fooOpen ? <ExpandLess /> : <ExpandMore />}
+        {foodOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open.fooOpen} timeout="auto" unmountOnExit>
+      <Collapse in={foodOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {foods.sort().map((item, ind) =>
             <Link href={`/${item}`} key={ind}>

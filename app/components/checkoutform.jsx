@@ -128,7 +128,6 @@ export default function CheckOutForm() {
         <p className='m-2 text-sm sm:text-2xl'>Price: {product.quantity * product.price}$</p>
       </div>
     </div>
-
   )
   return (
     <div className='pb-16'>

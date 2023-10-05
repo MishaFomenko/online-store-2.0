@@ -26,11 +26,11 @@ export async function GET(req) {
             const docRef = doc(db, collection, document);
             const docSnap = await getDoc(docRef);
             const userData = docSnap.data();
-            return NextResponse.json(userData)
+            return NextResponse.json(userData, { status: 200 })
         }
 
     } catch (error) {
-        return NextResponse.json(error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
 
@@ -39,10 +39,10 @@ export async function POST(req) {
     try {
         if (userData.action === "register") {
             await setDoc(doc(db, "userdata", userData.uid), userData.newUserData);
-            return NextResponse.json()
+            return NextResponse.json('success', { status: 200 })
         };
     } catch (error) {
-        return NextResponse.json(error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
 

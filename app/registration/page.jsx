@@ -44,6 +44,8 @@ export default function SignUp() {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
+          console.log(errorCode)
+          console.log(errorMessage)
         });
       setUser(userCredential.user)
       const res = await fetch('../api/userdata', {

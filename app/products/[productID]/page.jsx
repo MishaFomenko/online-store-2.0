@@ -13,7 +13,7 @@ export default function ProductPage() {
     const data = searchParams.get('data');
     const product = JSON.parse(data);
     const router = useRouter();
-    const { user, setUser } = useUserContext();
+    const { user } = useUserContext();
 
     useEffect(() => {
         user === null && router.push('/registration')

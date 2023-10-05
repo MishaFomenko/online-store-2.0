@@ -18,7 +18,8 @@ export default function Page({ params }) {
         const prodsByKwPath = '../api/products';
         const action = 'keywordsearch';
         const keyword = params.keyword.toLowerCase();
-        const prods = await customGetter(prodsByKwPath, action, null, null, null, keyword);
+        const requestPath = `${prodsByKwPath}?action=${action}&kw=${keyword}`
+        const prods = await customGetter(requestPath);
         setProdsByKw(prods);
     };
 

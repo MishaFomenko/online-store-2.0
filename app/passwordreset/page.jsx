@@ -43,6 +43,8 @@ export default function PasswordReset() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
       });
     router.push('/signin')
   };

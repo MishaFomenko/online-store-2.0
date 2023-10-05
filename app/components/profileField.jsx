@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,11 +8,12 @@ import Typography from '@mui/material/Typography';
 import { useUserContext } from '../context/userContext';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react'
+import { customGetter } from '../utils/fetchConstructor';
 
 export default function ProfileField({ field }) {
   const { userData, setUserData, user } = useUserContext();
   const [edit, setEdit] = useState(false);
-  let text
+  let text;
   switch (field) {
     case 'First name':
       text = userData.first;
@@ -30,19 +32,8 @@ export default function ProfileField({ field }) {
   }
   const [newVal, setNewVal] = useState(text === undefined ? 'empty' : text);
 
-  async function fetchUser(action, collection, document) {
-    const userRes = await fetch(`../api/userdata?action=${action}&collection=${collection}&document=${document}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    const userDataNew = await userRes.json();
-    setUserData(userDataNew)
-  };
-
   async function editUserData() {
-    const test = await fetch('../api/userdata', {
+    await fetch('../api/userdata', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -53,9 +44,13 @@ export default function ProfileField({ field }) {
         uid: user.uid,
       })
     })
-    const testText = await test.json();
-    console.log(testText)
-    await fetchUser('getuser', 'userdata', user.uid)
+    const userPath = '../api/userdata';
+    const action = 'getuser';
+    const collection = 'userdata';
+    const document = user.uid.toString();
+    const requestPath = `${userPath}?action=${action}&collection=${collection}&document=${document}`
+    const userDataNew = await customGetter(requestPath);
+    setUserData(userDataNew)
   }
 
   const handleSave = () => {

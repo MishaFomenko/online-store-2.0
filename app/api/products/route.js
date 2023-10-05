@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
-import { getDocs, getDoc, doc, collection, query, where } from "firebase/firestore";
+import { getDocs, collection, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 const algoliasearch = require('algoliasearch')
 
@@ -39,7 +39,7 @@ export async function GET(req) {
                 await Promise.all(bestSellerPromises);
             });
             await Promise.all(promises);
-            return NextResponse.json(bests)
+            return NextResponse.json(bests, { status: 200 })
 
         } else if (action === 'categorypage') {
 
@@ -63,7 +63,7 @@ export async function GET(req) {
                     .catch((error) => {
                         console.error('Error:', error);
                     });
-                return NextResponse.json(prodsByCat)
+                return NextResponse.json(prodsByCat, { status: 200 })
             } else {
                 const docData = await getDocs(collection(db, 'store', category, 'searchProductDetails'));
                 const prodsPromises = docData.docs.map(async (item) => {
@@ -71,7 +71,7 @@ export async function GET(req) {
                     prods.push(prodData)
                 });
                 await Promise.all(prodsPromises);
-                return NextResponse.json(prods)
+                return NextResponse.json(prods, { status: 200 })
             }
         } else if (action === 'keywordsearch') {
             const kw = currentURL.searchParams.get('kw');
@@ -92,9 +92,9 @@ export async function GET(req) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-            return NextResponse.json(prodsByKw)
+            return NextResponse.json(prodsByKw, { status: 200 })
         }
     } catch (error) {
-        return NextResponse.json(error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }

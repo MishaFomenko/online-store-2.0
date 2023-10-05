@@ -1,6 +1,6 @@
 
-const customGetter = async (relativePath, action, collection = null, document = null, category = null, keyword = null) => {
-    const resJson = await fetch(`${relativePath}?action=${action}&collection=${collection}&document=${document}&category=${category}&kw=${keyword}`, {
+const customGetter = async (requestPath) => {
+    const resJson = await fetch(requestPath, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

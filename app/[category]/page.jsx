@@ -1,28 +1,28 @@
 'use client'
 import { useState, useEffect } from 'react'
-import ProductCard from '../components/productcard'
+import ProductCard from '../components/productCard'
 import { useRouter } from 'next/navigation'
 import { useUserContext } from '../context/userContext'
 import { customGetter } from '../utils/fetchConstructor'
+import useSWR from 'swr'
 
 export default function Page({ params }) {
     const [prodsByCat, setProdsByCat] = useState([]);
     const router = useRouter();
     const { user } = useUserContext();
 
-    const handleProdsByCat = async () => {
-        const prodsByCatPath = './api/products';
-        const action = 'categorypage';
-        const prods = await customGetter(prodsByCatPath, action, null, null, params.category.toLowerCase());
-        setProdsByCat(prods);
-    };
-
     useEffect(() => {
         user === null && router.push('/registration')
-        if (prodsByCat.length === 0) {
-            handleProdsByCat()
-        }
     })
+
+    const prodsByCatPath = './api/products';
+    const action = 'categorypage';
+    const requestPath = `${prodsByCatPath}?action=${action}&category=${params.category.toLowerCase()}`
+    const { data, error, isLoading } = useSWR(requestPath, customGetter);
+
+    useEffect(() => {
+        !isLoading && setProdsByCat(data);
+    }, [setProdsByCat, data, isLoading])
 
     return (
         <>
