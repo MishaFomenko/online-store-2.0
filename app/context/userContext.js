@@ -26,8 +26,8 @@ export const UserContextProvider = ({ children }) => {
     let prevUser;
     try {
         prevUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}:[DEFAULT]`));
-    } catch (error) {
-        // console.log(error)
+    } catch {
+        console.log('Unable to log sessionStorage on the server');
     }
 
     const [user, setUser] = useState(prevUser);
