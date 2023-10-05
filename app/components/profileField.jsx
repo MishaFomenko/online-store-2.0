@@ -48,7 +48,7 @@ export default function ProfileField({ field }) {
     const userPath = '../api/userdata';
     const action = 'getuser';
     const collection = 'userdata';
-    const document = user.uid.toString();
+    const document = user.uid.toString() || null;
     const requestPath = `${userPath}?action=${action}&collection=${collection}&document=${document}`
     const userDataNew = await customGetter(requestPath);
     setUserData(userDataNew)
