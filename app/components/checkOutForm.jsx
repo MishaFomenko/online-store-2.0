@@ -7,14 +7,31 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState, useEffect } from 'react'
 import { useCartContext } from '../context/cartContext'
+import { useUserContext } from '../context/userContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 export default function CheckOutForm() {
 
+  const savePurchase = async () => {
+    await fetch('../api/userData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'savePurchase',
+        cart,
+        uid: user.uid,
+        date: new Date(),
+      })
+    })
+  }
+
   const stripe = useStripe();
   const elements = useElements();
   const { cart, setCart } = useCartContext();
+  const { user } = useUserContext();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false)
@@ -56,14 +73,14 @@ export default function CheckOutForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    await savePurchase();
+
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
     setIsLoading(true);
-
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -133,7 +150,7 @@ export default function CheckOutForm() {
     <div className='pb-16'>
       <p className='m-6 fixed right-0 text-3xl'>Total: {total}$</p>
       {checkoutList}
-      <form id="payment-form" onSubmit={handleSubmit} className='border-2 border-cyan-500 px-8 py-4 my-10'>
+      <form id="payment-form" onSubmit={(e) => handleSubmit(e)} className='border-2 border-cyan-500 px-8 py-4 my-10'>
         <LinkAuthenticationElement
           id="link-authentication-element"
           onChange={(e) => setEmail(e.value)}

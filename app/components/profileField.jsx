@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useUserContext } from '../context/userContext';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { customGetter } from '../utils/fetchConstructor';
 
 export default function ProfileField({ field }) {
@@ -34,7 +34,7 @@ export default function ProfileField({ field }) {
   const [newVal, setNewVal] = useState(text === undefined ? 'empty' : text);
 
   async function editUserData() {
-    await fetch('../api/userdata', {
+    await fetch('../api/userData', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export default function ProfileField({ field }) {
         uid: user.uid,
       })
     })
-    const userPath = '../api/userdata';
+    const userPath = '../api/userData';
     const action = 'getuser';
     const collection = 'userdata';
     const document = user?.uid.toString() || null;

@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation'
 import Profile from '../components/profile'
 import { customGetter } from '../utils/fetchConstructor'
 import useSWR from 'swr'
+import ProductCard from '../components/productCard'
+
 
 CustomTabPanel.propTypes = {
   children: PropTypes.node,
@@ -46,6 +48,7 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [purchases, setPurchases] = React.useState([]);
   const { user, userData, setUserData } = useUserContext();
   const router = useRouter();
 
@@ -55,6 +58,21 @@ export default function BasicTabs() {
   const document = user?.uid.toString() || null;
   const requestPath = `${fetchUserPath}?action=${action}&collection=${collection}&document=${document}`
   const { data, error, isLoading } = useSWR(requestPath, customGetter);
+
+  const getPurchases = async () => {
+    const purchasesPath = '../api/userData';
+    const action = 'getpurchases';
+    const collection = 'purchases';
+    const documentKey = user?.uid.toString() || null;
+    const requestPath = `${purchasesPath}?action=${action}&collection=${collection}&document=${documentKey}`
+    const pastPurchases = await customGetter(requestPath);
+    setPurchases(pastPurchases)
+  }
+
+  useEffect(() => {
+    getPurchases();
+  })
+
   useEffect(() => {
 
     if (user === null) {
@@ -85,7 +103,9 @@ export default function BasicTabs() {
           <></>}
       </CustomTabPanel>
       <CustomTabPanel value={currentTab} index={1}>
-        Nothing here yet
+        <div className='flex flex-wrap'>
+          {purchases.length !== 0 && purchases.map((item) => <ProductCard key={item.asin} item={item} />)}
+        </div>
       </CustomTabPanel>
     </Box>
   );
