@@ -1,45 +1,30 @@
-'use client'
+'use client';
 import {
   PaymentElement,
   LinkAuthenticationElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import { useState, useEffect } from 'react'
-import { useCartContext } from '../context/cartContext'
-import { useUserContext } from '../context/userContext'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react';
+import { useCartContext } from '../context/cartContext';
+import { useUserContext } from '../context/userContext';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { customPoster } from '../utils/fetchConstructor';
 
 export default function CheckOutForm() {
-
-  const savePurchase = async () => {
-    await fetch('../api/userData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'savePurchase',
-        cart,
-        uid: user.uid,
-        date: new Date(),
-      })
-    })
-  }
-
   const stripe = useStripe();
   const elements = useElements();
   const { cart, setCart } = useCartContext();
   const { user } = useUserContext();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!stripe) {
       return;
-    }
+    };
 
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
@@ -47,7 +32,7 @@ export default function CheckOutForm() {
 
     if (!clientSecret) {
       return;
-    }
+    };
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       if (paymentIntent) {
@@ -64,8 +49,8 @@ export default function CheckOutForm() {
           default:
             setMessage("Something went wrong.");
             break;
-        }
-      }
+        };
+      };
 
     });
   }, [stripe]);
@@ -73,7 +58,14 @@ export default function CheckOutForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await savePurchase();
+    const purchasePath = '../api/userData';
+    const purchaseBody = {
+      action: 'savePurchase',
+      cart,
+      uid: user.uid,
+      date: new Date(),
+    }
+    await customPoster(purchasePath, purchaseBody);
 
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.

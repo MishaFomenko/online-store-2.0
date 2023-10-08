@@ -51,41 +51,64 @@ export default function BasicTabs() {
   const [purchases, setPurchases] = React.useState([]);
   const { user, userData, setUserData } = useUserContext();
   const router = useRouter();
+  let groupedByDate;
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  useEffect(() => {
+    if (user === null) {
+      router.push('/signin');
+    };
+  });
 
   const fetchUserPath = '../api/userData';
-  const action = 'getuser';
-  const collection = 'userdata';
-  const document = user?.uid.toString() || null;
-  const requestPath = `${fetchUserPath}?action=${action}&collection=${collection}&document=${document}`
-  const { data, error, isLoading } = useSWR(requestPath, customGetter);
+  const fetchUserAction = 'getuser';
+  const fetchUserCollection = 'userdata';
+  const fetchUserDocument = user?.uid.toString() || null;
+  const fetchUserRequestPath = `${fetchUserPath}?action=${fetchUserAction}&collection=${fetchUserCollection}&document=${fetchUserDocument}`;
 
-  const getPurchases = async () => {
-    const purchasesPath = '../api/userData';
-    const action = 'getpurchases';
-    const collection = 'purchases';
-    const documentKey = user?.uid.toString() || null;
-    const requestPath = `${purchasesPath}?action=${action}&collection=${collection}&document=${documentKey}`
-    const pastPurchases = await customGetter(requestPath);
-    setPurchases(pastPurchases)
-  }
+  const purchasesPath = '../api/userData';
+  const purchasesAction = 'getpurchases';
+  const purchasesCollection = 'purchases';
+  const purchasesDocumentKey = user?.uid.toString() || null;
+  const purchasesRequestPath = `${purchasesPath}?action=${purchasesAction}&collection=${purchasesCollection}&document=${purchasesDocumentKey}`;
+
+  const accountFetchKeys = {
+    fetchUserRequestPath,
+    purchasesRequestPath,
+  };
+
+  const getAccountData = async (accountFetchKeys) => {
+    const { fetchUserRequestPath, purchasesRequestPath } = accountFetchKeys;
+    const userAccountData = await customGetter(fetchUserRequestPath);
+    const pastPurchases = await customGetter(purchasesRequestPath);
+    return { userAccountData, pastPurchases };
+  };
+
+  const { data, error, isLoading } = useSWR(accountFetchKeys, getAccountData);
 
   useEffect(() => {
-    getPurchases();
-  })
-
-  useEffect(() => {
-
-    if (user === null) {
-      router.push('/signin')
-    }
     if (!isLoading) {
-      setUserData(data)
-    }
-  })
+      const { userAccountData, pastPurchases } = data;
+      setUserData(userAccountData);
+      setPurchases(pastPurchases);
+    };
+  }, [data, isLoading, setUserData, setPurchases, router, user]);
 
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
+
+  if (purchases.length) {
+    groupedByDate = purchases.reduce((result, item) => {
+      const date = item.date;
+      if (!result[date]) {
+        result[date] = [];
+      }
+      result[date].push(item);
+      return result;
+    }, {});
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -103,8 +126,25 @@ export default function BasicTabs() {
           <></>}
       </CustomTabPanel>
       <CustomTabPanel value={currentTab} index={1}>
-        <div className='flex flex-wrap'>
-          {purchases.length !== 0 && purchases.map((item) => <ProductCard key={item.asin} item={item} />)}
+        <div className='w-full'>
+          {purchases.length
+            ?
+            Object.keys(groupedByDate).map((date, ind) => {
+              const purchaseDate = new Date(date);
+              return (
+                <div key={ind}>
+                  <div>
+                    <p className='text-4xl'>{days[purchaseDate.getDay()]}, {months[purchaseDate.getMonth()] + ' ' + purchaseDate.getDate()}, {purchaseDate.getHours()}:{purchaseDate.getMinutes()}</p>
+                  </div>
+                  <div className='flex flex-wrap'>
+                    {groupedByDate[date].map((item) => <ProductCard key={item.asin} item={item} />)}
+                  </div>
+                </div>
+              )
+            })
+            :
+            <></>
+          }
         </div>
       </CustomTabPanel>
     </Box>

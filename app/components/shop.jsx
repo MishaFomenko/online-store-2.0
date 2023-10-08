@@ -1,38 +1,30 @@
-'use client'
-import ProductCard from './productCard'
-import { useEffect, useState } from 'react'
+'use client';
+import ProductCard from './productCard';
+import { useEffect, useState } from 'react';
+import { customGetter } from '../utils/fetchConstructor';
+import useSWR from 'swr';
 
 export default function Shop() {
     const [bs, setBs] = useState([]);
-    const fetchBests = async (action) => {
-        const jdoc = await fetch(`./api/products?action=${action}`, {
-            method: 'GET',
-            'Content-Type': 'application/json',
-        })
-        const doc = await jdoc.json();
-        return doc;
-    }
 
-    const handleBestSellers = async () => {
-        const bests = await fetchBests('homepage')
-        setBs(bests);
-    };
+    const bestsPath = './api/products';
+    const bestsAction = 'homepage';
+    const bestsRequestPath = `${bestsPath}?action=${bestsAction}`;
+    const { data, error, isLoading } = useSWR(bestsRequestPath, customGetter);
 
     useEffect(() => {
-        if (bs.length === 0) {
-            handleBestSellers()
-        }
-    })
+        !isLoading && setBs(data);
+    }, [data, isLoading]);
 
     return (
         <>
             <div className='h-16 bg-blue-400 flex items-center p-6'>Best Sellers</div>
             <div className='flex flex-wrap'>
-                {bs.length !== 0 && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
+                {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
             </div>
             <div className='h-16 bg-blue-400 flex items-center p-6'>Suggested for you</div>
             <div className='flex flex-wrap'>
-                {bs.length !== 0 && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
+                {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
             </div>
         </>
     )

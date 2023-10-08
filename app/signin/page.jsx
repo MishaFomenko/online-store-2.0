@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,8 +11,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useUserContext } from '../context/userContext'
-import { useRouter } from 'next/navigation'
+import { useUserContext } from '../context/userContext';
+import { useRouter } from 'next/navigation';
 import { setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 
 function Copyright(props) {
@@ -26,7 +26,7 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
+};
 
 const defaultTheme = createTheme();
 
@@ -44,22 +44,22 @@ export default function SignIn() {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode)
-          console.log(errorMessage)
+          console.log(errorCode);
+          console.log(errorMessage);
         });
-      setUser(userCredential.user)
+      setUser(userCredential.user);
     };
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await signinUser(data.get('email'), data.get('password'))
+    await signinUser(data.get('email'), data.get('password'));
   };
 
   React.useEffect(() => {
-    user !== null && router.push('/')
-  })
+    user !== null && router.push('/');
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -126,4 +126,4 @@ export default function SignIn() {
       </Container>
     </ThemeProvider>
   );
-}
+};

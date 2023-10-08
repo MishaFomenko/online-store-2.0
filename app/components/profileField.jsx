@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useUserContext } from '../context/userContext';
 import TextField from '@mui/material/TextField';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { customGetter } from '../utils/fetchConstructor';
 
 export default function ProfileField({ field }) {
@@ -29,8 +29,8 @@ export default function ProfileField({ field }) {
       text = userData.date;
       break;
     default:
-      throw (Error(`unknown profile field props: ${field}`))
-  }
+      throw (Error(`unknown profile field props: ${field}`));
+  };
   const [newVal, setNewVal] = useState(text === undefined ? 'empty' : text);
 
   async function editUserData() {
@@ -44,21 +44,21 @@ export default function ProfileField({ field }) {
         newVal,
         uid: user.uid,
       })
-    })
+    });
     const userPath = '../api/userData';
     const action = 'getuser';
     const collection = 'userdata';
     const document = user?.uid.toString() || null;
-    const requestPath = `${userPath}?action=${action}&collection=${collection}&document=${document}`
+    const requestPath = `${userPath}?action=${action}&collection=${collection}&document=${document}`;
     const userDataNew = await customGetter(requestPath);
-    setUserData(userDataNew)
-  }
+    setUserData(userDataNew);
+  };
 
   const handleSave = () => {
     if (text !== newVal) {
-      editUserData()
-    }
-  }
+      editUserData();
+    };
+  };
 
   return (
     <Card sx={{ width: '70%', margin: '5px' }} elevation={3}>

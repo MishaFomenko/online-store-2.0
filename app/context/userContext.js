@@ -1,8 +1,8 @@
-'use client'
+'use client';
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCoGURJeUWdIylWkAEDYEpOqY6YnAaJYy0",
@@ -23,12 +23,12 @@ const db = getFirestore(app);
 const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-    let prevUser;
+    let prevUser = undefined;
     try {
         prevUser = JSON.parse(sessionStorage.getItem(`firebase:authUser:${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}:[DEFAULT]`));
     } catch {
         console.log('Unable to log sessionStorage on the server');
-    }
+    };
 
     const [user, setUser] = useState(prevUser);
     const [userData, setUserData] = useState({});

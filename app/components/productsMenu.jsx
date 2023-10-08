@@ -11,12 +11,12 @@ import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import ShortTextIcon from '@mui/icons-material/ShortText';
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function ProductsMenu() {
-  const [catOpen, setCatOpen] = React.useState(false)
-  const [famOpen, setFamOpen] = React.useState(false)
-  const [foodOpen, setFoodOpen] = React.useState(false)
+  const [catOpen, setCatOpen] = React.useState(false);
+  const [famOpen, setFamOpen] = React.useState(false);
+  const [foodOpen, setFoodOpen] = React.useState(false);
 
   const handleCatClick = () => {
     setCatOpen(prev => (!prev));

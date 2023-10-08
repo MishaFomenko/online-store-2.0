@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,11 +18,9 @@ import { useUserContext } from '../context/userContext';
 import { useCartContext } from '../context/cartContext';
 import ProductsMenu from './productsMenu';
 import CartCard from './cartCard';
-import SearchBar from './searchBar'
-import { getAuth, signOut, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
-import CartIcon from './cartIcon'
-
-const auth = getAuth();
+import SearchBar from './searchBar';
+import { signOut, setPersistence, browserSessionPersistence } from "firebase/auth";
+import CartIcon from './cartIcon';
 
 const pages = ['Home'];
 const settings = ['Account', 'Logout'];
@@ -30,7 +28,7 @@ const settings = ['Account', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, setUser } = useUserContext();
+  const { user, setUser, auth } = useUserContext();
   const { cartOpen } = useCartContext();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const router = useRouter();
@@ -47,8 +45,8 @@ function ResponsiveAppBar() {
   };
 
   const handleHome = () => {
-    router.push('/')
-  }
+    router.push('/');
+  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -56,8 +54,8 @@ function ResponsiveAppBar() {
 
   const handleUserAccount = async (setting) => {
     if (setting === 'Account') {
-      router.push('../account')
-    }
+      router.push('../account');
+    };
     if (setting === 'Logout') {
       const userCredential = await setPersistence(auth, browserSessionPersistence)
         .then(async () => {
@@ -69,13 +67,13 @@ function ResponsiveAppBar() {
           const errorCode = error.code;
           const errorMessage = error.message;
         });
-      setUser(null)
-      router.push('/signin')
-    }
-  }
+      setUser(null);
+      router.push('/signin');
+    };
+  };
   const handleMenuClick = () => {
     setMenuOpen(prev => !prev);
-  }
+  };
 
   return (
     <AppBar position="static">
@@ -99,7 +97,6 @@ function ResponsiveAppBar() {
               </IconButton>
 
             </>
-
             :
             <>
               <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

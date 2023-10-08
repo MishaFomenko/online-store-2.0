@@ -1,10 +1,10 @@
-'use client'
+'use client';
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react'
 import { useCartContext } from '../../context/cartContext';
 import { useUserContext } from '../../context/userContext'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function ProductPage() {
     const [count, setCount] = useState(1);
@@ -16,15 +16,15 @@ export default function ProductPage() {
     const { user } = useUserContext();
 
     useEffect(() => {
-        user === null && router.push('/registration')
-    }, [user, router])
+        user === null && router.push('/registration');
+    }, [user, router]);
 
     const handleDecrement = () => {
         count > 1 && setCount(prev => prev - 1);
-    }
+    };
     const handleIncrement = () => {
         setCount(prev => prev + 1);
-    }
+    };
     const handleAddToCart = (product) => {
         const indexPrev = cart.findIndex(item => item.asin === product.asin);
         if (indexPrev === -1) {
@@ -32,13 +32,13 @@ export default function ProductPage() {
                 [...prev, {
                     ...product,
                     quantity: count
-                }]))
+                }]));
         } else {
             const newCart = [...cart];
             newCart[indexPrev].quantity += count;
-            setCart(newCart)
-        }
-    }
+            setCart(newCart);
+        };
+    };
 
     return (
         <>

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,9 +11,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useUserContext } from '../context/userContext'
-import { useRouter } from 'next/navigation'
+import { useUserContext } from '../context/userContext';
+import { useRouter } from 'next/navigation';
 import { setPersistence, createUserWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
+import { customPoster } from '../utils/fetchConstructor';
 
 function Copyright(props) {
   return (
@@ -31,10 +32,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-
   const router = useRouter();
   const { user, setUser, auth } = useUserContext();
-
 
   const registerUser = async (email, password, newUserData) => {
     if (email !== '' && password !== '') {
@@ -45,21 +44,19 @@ export default function SignUp() {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode)
-          console.log(errorMessage)
+          console.log(errorCode);
+          console.log(errorMessage);
         });
       setUser(userCredential.user)
-      const res = await fetch('../api/userdata', {
-        method: 'POST',
-        'Content-Type': 'application/json',
-        body: JSON.stringify({
-          action: 'register',
-          uid: userCredential.user.uid,
-          newUserData,
-        })
-      })
+      const userPath = '../api/userData';
+      const userBody = {
+        action: 'register',
+        uid: userCredential.user.uid,
+        newUserData,
+      };
+      await customPoster(userPath, userBody);
     };
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -69,13 +66,13 @@ export default function SignUp() {
       last: data.get('lastName'),
       gender: undefined,
       date: undefined,
-    }
-    await registerUser(data.get('email'), data.get('password'), newUserData)
+    };
+    await registerUser(data.get('email'), data.get('password'), newUserData);
   };
 
   React.useEffect(() => {
-    user !== null && router.push('/')
-  })
+    user !== null && router.push('/');
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
