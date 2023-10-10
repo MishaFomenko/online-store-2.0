@@ -1,10 +1,10 @@
 'use client';
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useCartContext } from '../../context/cartContext';
 import { useUserContext } from '../../context/userContext'
-import { useCustomRedirect } from '../customHooks';
+import { useCustomRedirect } from '../../customHooks';
 
 export default function ProductPage() {
     const [count, setCount] = useState(1);

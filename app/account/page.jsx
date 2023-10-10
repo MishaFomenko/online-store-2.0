@@ -51,7 +51,7 @@ export default function BasicTabs() {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [purchases, setPurchases] = React.useState([]);
   const { user, userData, setUserData } = useUserContext();
-  let groupedByDate;
+
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -95,6 +95,7 @@ export default function BasicTabs() {
     setCurrentTab(newValue);
   };
 
+  let groupedByDate = {};
   if (purchases.length) {
     groupedByDate = purchases.reduce((result, item) => {
       const date = item.date;

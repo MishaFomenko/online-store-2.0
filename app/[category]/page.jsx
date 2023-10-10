@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/productCard';
-// import { useRouter } from 'next/navigation';
 import { useUserContext } from '../context/userContext';
 import { customGetter } from '../utils/fetchConstructor';
 import useSWR from 'swr';

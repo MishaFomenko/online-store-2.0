@@ -7,7 +7,7 @@ import { customGetter } from '../../utils/fetchConstructor';
 import useSWR from 'swr';
 import Spinner from '../../components/spinner';
 import ErrorComponent from '../../components/errorComponent';
-import { useCustomRedirect } from '../customHooks';
+import { useCustomRedirect } from '../../customHooks';
 
 export default function Page({ params }) {
     const [prodsByKw, setProdsByKw] = useState([]);

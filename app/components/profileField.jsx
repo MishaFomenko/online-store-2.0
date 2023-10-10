@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useUserContext } from '../context/userContext';
 import TextField from '@mui/material/TextField';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { customGetter } from '../utils/fetchConstructor';
 
 export default function ProfileField({ field }) {
