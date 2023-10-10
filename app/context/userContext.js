@@ -34,7 +34,6 @@ export const UserContextProvider = ({ children }) => {
     const [userData, setUserData] = useState({});
 
 
-
     return (
         <UserContext.Provider value={{ user, setUser, userData, setUserData, auth, db }}>
             {children}

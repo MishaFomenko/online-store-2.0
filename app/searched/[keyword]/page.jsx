@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useUserContext } from '../../context/userContext';
 import { customGetter } from '../../utils/fetchConstructor';
 import useSWR from 'swr';
+import Spinner from '../../components/spinner';
+import ErrorComponent from '../../components/errorComponent';
+import { useCustomRedirect } from '../customHooks';
 
 export default function Page({ params }) {
     const [prodsByKw, setProdsByKw] = useState([]);
-    const router = useRouter();
     const { user } = useUserContext();
 
     const prodsByKwPath = '../api/products';
@@ -17,18 +19,30 @@ export default function Page({ params }) {
     const prodsRequestPath = `${prodsByKwPath}?action=${prodsAction}&kw=${prodsKeyword}`;
     const { data, error, isLoading } = useSWR(prodsRequestPath, customGetter);
 
+    useCustomRedirect('/signin', user);
+
     useEffect(() => {
-        user === null && router.push('/registration');
         !isLoading && setProdsByKw(data);
-    }, [data, isLoading, router, user]);
+    }, [data, isLoading]);
 
     return (
         <>
-            <div className='flex flex-wrap'>
-                {!isLoading && prodsByKw.map((item) =>
-                    <ProductCard key={item.asin} item={item} />)
-                }
-            </div>
+            {!isLoading && !data && error
+                ?
+                <ErrorComponent />
+                :
+                isLoading
+                    ?
+                    <div className='flex justify-center items-center h-screen'>
+                        <Spinner />
+                    </div>
+                    :
+                    <div className='flex flex-wrap'>
+                        {!isLoading && prodsByKw.map((item) =>
+                            <ProductCard key={item.asin} item={item} />)
+                        }
+                    </div>
+            }
         </>
     );
 };

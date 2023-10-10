@@ -76,13 +76,16 @@ function ResponsiveAppBar() {
   };
 
   return (
+
+
+    window !== 'undefined' &&
     <AppBar position="static">
       {menuOpen ? <ProductsMenu /> : <></>}
       {cartOpen ? <CartCard /> : <></>}
 
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {user !== null
+          {user !== null && typeof window !== 'undefined'
             ?
             <>
               <IconButton
@@ -98,6 +101,8 @@ function ResponsiveAppBar() {
 
             </>
             :
+            typeof window !== 'undefined'
+            &&
             <>
               <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
               <Typography
@@ -118,6 +123,7 @@ function ResponsiveAppBar() {
                 LOGO
               </Typography>
             </>
+
           }
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -177,7 +183,7 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {user !== null && pages.map((page) => (
+            {user !== null && typeof window !== 'undefined' && pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => (handleCloseNavMenu(), handleHome())}
@@ -186,10 +192,10 @@ function ResponsiveAppBar() {
                 {page}
               </Button>
             ))}
-            {user !== null ? <div className='w-full flex justify-center'><SearchBar /></div> : <></>}
+            {user !== null && typeof window !== 'undefined' && <div className='w-full flex justify-center'><SearchBar /></div>}
 
           </Box>
-          {user !== null &&
+          {user !== null && typeof window !== 'undefined' &&
             <Box sx={{ flexGrow: 0 }}>
               <CartIcon />
               <Tooltip title="Open settings">
@@ -228,6 +234,7 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
+
   );
 }
 export default ResponsiveAppBar;

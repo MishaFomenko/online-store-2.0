@@ -15,8 +15,8 @@ export default function CartCard() {
     const handleDecreaseAmount = (product) => {
         const newCart = [...cart];
         const ind = newCart.findIndex(item => item.asin === product.asin);
-        newCart[ind].quantity--;
-        setCart(newCart);
+        newCart[ind].quantity > 0 && newCart[ind].quantity--;
+        newCart[ind].quantity > 0 && setCart(newCart);
     }
     const handleDeleteFromCart = (product) => {
         const newCart = [...cart];

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react'
 import { useCartContext } from '../../context/cartContext';
 import { useUserContext } from '../../context/userContext'
-import { useRouter } from 'next/navigation';
+import { useCustomRedirect } from '../customHooks';
 
 export default function ProductPage() {
     const [count, setCount] = useState(1);
@@ -12,12 +12,9 @@ export default function ProductPage() {
     const searchParams = useSearchParams();
     const data = searchParams.get('data');
     const product = JSON.parse(data);
-    const router = useRouter();
     const { user } = useUserContext();
 
-    useEffect(() => {
-        user === null && router.push('/registration');
-    }, [user, router]);
+    useCustomRedirect('/signin', user);
 
     const handleDecrement = () => {
         count > 1 && setCount(prev => prev - 1);

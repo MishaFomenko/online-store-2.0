@@ -3,6 +3,8 @@ import ProductCard from './productCard';
 import { useEffect, useState } from 'react';
 import { customGetter } from '../utils/fetchConstructor';
 import useSWR from 'swr';
+import Spinner from './spinner';
+import ErrorComponent from './errorComponent';
 
 export default function Shop() {
     const [bs, setBs] = useState([]);
@@ -18,14 +20,28 @@ export default function Shop() {
 
     return (
         <>
-            <div className='h-16 bg-blue-400 flex items-center p-6'>Best Sellers</div>
-            <div className='flex flex-wrap'>
-                {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
-            </div>
-            <div className='h-16 bg-blue-400 flex items-center p-6'>Suggested for you</div>
-            <div className='flex flex-wrap'>
-                {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
-            </div>
+            {!isLoading && !data && error
+                ?
+                <ErrorComponent />
+                :
+                isLoading
+                    ?
+                    <div className='flex justify-center items-center h-screen'>
+                        <Spinner />
+                    </div>
+                    :
+                    <>
+                        <div className='h-16 bg-blue-400 flex items-center p-6'>Best Sellers</div>
+                        <div className='flex flex-wrap'>
+                            {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
+                        </div>
+                        <div className='h-16 bg-blue-400 flex items-center p-6'>Suggested for you</div>
+                        <div className='flex flex-wrap'>
+                            {!isLoading && bs.map((item) => <ProductCard key={item.asin} item={item} />)}
+                        </div>
+                    </>
+            }
         </>
+
     )
 }
