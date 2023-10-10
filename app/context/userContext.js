@@ -38,8 +38,8 @@ export const UserContextProvider = ({ children }) => {
         <UserContext.Provider value={{ user, setUser, userData, setUserData, auth, db }}>
             {children}
         </UserContext.Provider>
-    )
-}
+    );
+};
 
 export const useUserContext = () => useContext(UserContext);
 

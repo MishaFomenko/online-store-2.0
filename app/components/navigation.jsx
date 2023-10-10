@@ -76,9 +76,6 @@ function ResponsiveAppBar() {
   };
 
   return (
-
-
-    window !== 'undefined' &&
     <AppBar position="static">
       {menuOpen ? <ProductsMenu /> : <></>}
       {cartOpen ? <CartCard /> : <></>}
@@ -234,7 +231,6 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
-
   );
 }
 export default ResponsiveAppBar;

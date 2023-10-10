@@ -1,8 +1,10 @@
 'use client';
-import ResponsiveAppBar from './components/navigation';
 import { UserContextProvider } from './context/userContext';
 import { CartContextProvider } from './context/cartContext';
 import { Inter } from 'next/font/google';
+import dynamic from 'next/dynamic';
+
+const ResponsiveAppBar = dynamic(() => import('./components/navigation'), { ssr: false })
 
 const inter = Inter({ subsets: ['latin'] })
 

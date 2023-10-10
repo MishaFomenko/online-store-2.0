@@ -1,8 +1,10 @@
 'use client';
-import Shop from './components/shop';
 import { useUserContext } from './context/userContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+const Shop = dynamic(() => import('./components/shop'), { ssr: false })
 
 export default function Home() {
   const router = useRouter();
@@ -14,7 +16,7 @@ export default function Home() {
 
   return (
     <div>
-      {user !== null && typeof window !== 'undefined' && <Shop />}
+      <Shop />
     </div>
   )
 }
