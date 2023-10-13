@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import { PurchasesByUser, PurchaseRecords } from '../../utils/customClasses';
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -33,25 +34,9 @@ export async function GET(req) {
             const purchasesRef = collection(db, col);
             const q = query(purchasesRef, where('userID', '==', document));
             const querySnapshot = await getDocs(q);
-            const purchasedProds = [];
-            const recsPromises = querySnapshot.docs.map(async (rec) => {
-                const prodRecord = rec.data();
-                const prodsPromises = allData.docs.map(async (document) => {
-                    const purchased = await getDocs(query(collection(db, 'store', document.id, 'searchProductDetails'), where('asin', '==', prodRecord.productID)));
-                    const purchasedPromises = purchased.docs.map((prod) => {
-                        const purchasedData = prod.data();
-                        const fullPurchaseData = {
-                            ...purchasedData,
-                            ...prodRecord,
-                        }
-                        purchasedProds.push(fullPurchaseData);
-                    });
-                    await Promise.all(purchasedPromises);
-                });
-                await Promise.all(prodsPromises);
-            })
-            await Promise.all(recsPromises)
-            return NextResponse.json(purchasedProds, { status: 200 });
+            const records = new PurchasesByUser(querySnapshot);
+            const showableRecords = await records.getProdsFromPurchaseRecords(allData, getDocs, query, collection, db, where);
+            return NextResponse.json(showableRecords, { status: 200 });
         }
 
     } catch (error) {
@@ -67,20 +52,8 @@ export async function POST(req) {
             return NextResponse.json('success', { status: 200 })
         };
         if (userData.action === "savePurchase") {
-            const purchaseRecords = userData.cart.map((prod) => {
-                const purchasedProduct = {
-                    userID: userData.uid,
-                    quantity: prod.quantity,
-                    date: userData.date,
-                    productID: prod.asin,
-                };
-                return purchasedProduct
-            })
-            await Promise.all(
-                purchaseRecords.map((purchaseRecord) => {
-                    return addDoc(collection(db, 'purchases'), purchaseRecord);
-                })
-            );
+            const savablePurchase = new PurchaseRecords(userData);
+            await savablePurchase.addPurchaseRecords(addDoc, collection, db);
             return NextResponse.json('success', { status: 200 })
         }
     } catch (error) {

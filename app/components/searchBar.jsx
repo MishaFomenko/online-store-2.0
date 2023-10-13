@@ -22,7 +22,7 @@ export default function SearchBar() {
     <Paper
       component="form"
       onSubmit={e => handleSubmit(e)}
-      sx={{ p: '2px 4px', m: '10px 0px', display: 'flex', alignItems: 'center', width: 300 }}
+      sx={{ p: '2px 4px', m: '10px 0px', display: 'flex', alignItems: 'center', width: { sx: 80, md: 300 } }}
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}

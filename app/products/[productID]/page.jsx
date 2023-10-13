@@ -40,13 +40,13 @@ export default function ProductPage() {
     return (
         <>
             <div className='grid grid-cols-2 w-screen'>
-                <div className='col-start-1 flex justify-center'>
+                <div className='col-start-1 '>
                     <Image
                         src={product.imgUrl}
                         alt=''
                         width={500}
                         height={100}
-                        className=' m-10'
+                        className=' pr-10 pt-5 pl-5'
                     >
                     </Image>
                 </div>
@@ -57,9 +57,9 @@ export default function ProductPage() {
                     <div className='py-5 flex'>
                         <button className='p-2 mr-5 bg-black text-white' onClick={() => handleAddToCart(product)}>Add to cart +</button>
                         <div className='flex mx-5'>
-                            <button onClick={handleDecrement} className='m-2'>-</button>
-                            <p className='m-2'>{count}</p>
-                            <button onClick={handleIncrement} className='m-2'>+</button>
+                            <button onClick={handleDecrement} className='p-2'>-</button>
+                            <p className='p-2'>{count}</p>
+                            <button onClick={handleIncrement} className='p-2'>+</button>
                         </div>
                     </div>
                 </div>

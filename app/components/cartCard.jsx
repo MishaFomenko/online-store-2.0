@@ -25,7 +25,7 @@ export default function CartCard() {
     }
 
     return (
-        <div className='bg-white border-2 border-black sm:w-72 h-96 sm:absolute sm:right-36 mt-12 overflow-auto z-10'>
+        <div className='bg-white border-2 border-black sm:w-96 h-96 sm:absolute sm:right-36 mt-12 overflow-auto z-20'>
             {cart.length !== 0 &&
                 <>
                     <button className='p-2 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white hover:border-white transition duration-300 my-2 ml-24' onClick={() => (router.push('/checkout'), setCartOpen(false))}>CheckOut</button>

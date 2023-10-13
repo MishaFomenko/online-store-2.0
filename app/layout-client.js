@@ -12,12 +12,14 @@ const ClientRootLayout = ({ children }) => {
     return (
         <html lang="en" className='h-full bg-white'>
             <body className={inter.className}>
-                <UserContextProvider>
-                    <CartContextProvider>
-                        <ResponsiveAppBar />
-                        {children}
-                    </CartContextProvider>
-                </UserContextProvider>
+                <main>
+                    <UserContextProvider>
+                        <CartContextProvider>
+                            <ResponsiveAppBar />
+                            {children}
+                        </CartContextProvider>
+                    </UserContextProvider>
+                </main>
             </body>
         </html>
     );

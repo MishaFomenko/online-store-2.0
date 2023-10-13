@@ -68,7 +68,6 @@ function ResponsiveAppBar() {
           const errorMessage = error.message;
         });
       setUser(null);
-      router.push('/signin');
     };
   };
   const handleMenuClick = () => {
@@ -90,7 +89,6 @@ function ResponsiveAppBar() {
                 edge="start"
                 color="inherit"
                 aria-label="menu"
-                sx={{ mr: 2 }}
                 onClick={handleMenuClick}
               >
                 <MenuIcon />
@@ -108,7 +106,6 @@ function ResponsiveAppBar() {
                 component="a"
                 href="/"
                 sx={{
-                  mr: 2,
                   display: { xs: 'none', md: 'flex' },
                   fontFamily: 'monospace',
                   fontWeight: 700,
@@ -123,7 +120,7 @@ function ResponsiveAppBar() {
 
           }
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -159,8 +156,8 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+          {/* <Typography
             variant="h5"
             noWrap
             component="a"
@@ -177,14 +174,14 @@ function ResponsiveAppBar() {
             }}
           >
             LOGO
-          </Typography>
+          </Typography> */}
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {user !== null && typeof window !== 'undefined' && pages.map((page) => (
+          <Box sx={{ flexGrow: 1, display: 'flex' }}>
+            {user !== null && pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => (handleCloseNavMenu(), handleHome())}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: { xs: 'none', md: 'block' } }}
               >
                 {page}
               </Button>
@@ -192,7 +189,8 @@ function ResponsiveAppBar() {
             {user !== null && typeof window !== 'undefined' && <div className='w-full flex justify-center'><SearchBar /></div>}
 
           </Box>
-          {user !== null && typeof window !== 'undefined' &&
+          {
+            user !== null && typeof window !== 'undefined' &&
             <Box sx={{ flexGrow: 0 }}>
               <CartIcon />
               <Tooltip title="Open settings">
