@@ -1,20 +1,19 @@
-'use client'
-import Shop from './components/shop'
-import { useUserContext } from './context/userContext'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+'use client';
+import { useUserContext } from './context/userContext';
+import dynamic from 'next/dynamic';
+import { useCustomRedirect } from './customHooks';
+
+
+const Shop = dynamic(() => import('./components/shop'), { ssr: false })
 
 export default function Home() {
-  const router = useRouter();
   const { user } = useUserContext();
 
-  useEffect(() => {
-    user === null && router.push('/registration')
-  })
+  useCustomRedirect('/signin', user);
 
   return (
     <div>
-      {user !== null && <Shop />}
+      <Shop />
     </div>
   )
 }

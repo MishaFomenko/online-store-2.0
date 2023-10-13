@@ -1,11 +1,11 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function ProductCard({ item }) {
   const router = useRouter();
@@ -13,8 +13,8 @@ export default function ProductCard({ item }) {
   const handleProductClick = (item) => {
     const serItem = JSON.stringify(item);
     const encodedItem = encodeURIComponent(serItem);
-    router.push(`/products/${item.asin}?data=${encodedItem}`)
-  }
+    router.push(`/products/${item.asin}?data=${encodedItem}`);
+  };
 
   return (
     <Card sx={{ maxWidth: 200, maxHeight: 600, margin: 2, zIndex: 0 }}>

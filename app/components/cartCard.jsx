@@ -1,6 +1,6 @@
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useCartContext } from '../context/cartContext'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCartContext } from '../context/cartContext';
 
 export default function CartCard() {
     const { cart, setCart, setCartOpen } = useCartContext();
@@ -15,8 +15,8 @@ export default function CartCard() {
     const handleDecreaseAmount = (product) => {
         const newCart = [...cart];
         const ind = newCart.findIndex(item => item.asin === product.asin);
-        newCart[ind].quantity--;
-        setCart(newCart);
+        newCart[ind].quantity > 0 && newCart[ind].quantity--;
+        newCart[ind].quantity > 0 && setCart(newCart);
     }
     const handleDeleteFromCart = (product) => {
         const newCart = [...cart];
@@ -25,7 +25,7 @@ export default function CartCard() {
     }
 
     return (
-        <div className='bg-white border-2 border-black sm:w-72 h-96 sm:absolute sm:right-36 mt-12 overflow-auto z-10'>
+        <div className='bg-white border-2 border-black sm:w-96 h-96 sm:absolute sm:right-36 mt-12 overflow-auto z-20'>
             {cart.length !== 0 &&
                 <>
                     <button className='p-2 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white hover:border-white transition duration-300 my-2 ml-24' onClick={() => (router.push('/checkout'), setCartOpen(false))}>CheckOut</button>

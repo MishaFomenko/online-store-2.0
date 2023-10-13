@@ -1,28 +1,30 @@
-'use client'
+'use client';
 import {
   PaymentElement,
   LinkAuthenticationElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import { useState, useEffect } from 'react'
-import { useCartContext } from '../context/cartContext'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react';
+import { useCartContext } from '../context/cartContext';
+import { useUserContext } from '../context/userContext';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { customPoster } from '../utils/fetchConstructor';
 
 export default function CheckOutForm() {
-
   const stripe = useStripe();
   const elements = useElements();
   const { cart, setCart } = useCartContext();
+  const { user } = useUserContext();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!stripe) {
       return;
-    }
+    };
 
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
@@ -30,7 +32,7 @@ export default function CheckOutForm() {
 
     if (!clientSecret) {
       return;
-    }
+    };
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       if (paymentIntent) {
@@ -47,8 +49,8 @@ export default function CheckOutForm() {
           default:
             setMessage("Something went wrong.");
             break;
-        }
-      }
+        };
+      };
 
     });
   }, [stripe]);
@@ -56,14 +58,21 @@ export default function CheckOutForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const purchasePath = '../api/userData';
+    const purchaseBody = {
+      action: 'savePurchase',
+      cart,
+      uid: user.uid,
+      date: new Date(),
+    }
+    await customPoster(purchasePath, purchaseBody);
+
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
     setIsLoading(true);
-
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -84,6 +93,7 @@ export default function CheckOutForm() {
     }
 
     setIsLoading(false);
+    setCart([]);
   };
 
   const paymentElementOptions = {
@@ -101,8 +111,8 @@ export default function CheckOutForm() {
   const handleDecreaseAmount = (product) => {
     const newCart = [...cart];
     const ind = newCart.findIndex(item => item.asin === product.asin);
-    newCart[ind].quantity--;
-    setCart(newCart);
+    newCart[ind].quantity > 1 && newCart[ind].quantity--;
+    newCart[ind].quantity > 1 && setCart(newCart);
   }
   const handleDeleteFromCart = (product) => {
     const newCart = [...cart];
@@ -126,14 +136,15 @@ export default function CheckOutForm() {
           <button onClick={() => handleIncreaseAmount(product)} className="text-sm sm:text-2xl border-2 border-black rounded-lg px-2">+</button>
         </div>
         <p className='m-2 text-sm sm:text-2xl'>Price: {product.quantity * product.price}$</p>
+        <button className='p-2 bg-red-400 text-white w-32' onClick={() => handleDeleteFromCart(product)}>Delete</button>
       </div>
     </div>
   )
   return (
     <div className='pb-16'>
-      <p className='m-6 fixed right-0 text-3xl'>Total: {total}$</p>
+      <p className='p-3 m-6 fixed right-0 text-3xl border-4 rounded-xl bg-white z-10'>Total: {total}$</p>
       {checkoutList}
-      <form id="payment-form" onSubmit={handleSubmit} className='border-2 border-cyan-500 px-8 py-4 my-10'>
+      <form id="payment-form" onSubmit={(e) => handleSubmit(e)} className='border-2 border-cyan-500 px-8 py-4 my-10'>
         <LinkAuthenticationElement
           id="link-authentication-element"
           onChange={(e) => setEmail(e.value)}

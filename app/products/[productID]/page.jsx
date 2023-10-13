@@ -1,10 +1,10 @@
-'use client'
+'use client';
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image';
+import { useState } from 'react'
 import { useCartContext } from '../../context/cartContext';
 import { useUserContext } from '../../context/userContext'
-import { useRouter } from 'next/navigation'
+import { useCustomRedirect } from '../../customHooks';
 
 export default function ProductPage() {
     const [count, setCount] = useState(1);
@@ -12,19 +12,16 @@ export default function ProductPage() {
     const searchParams = useSearchParams();
     const data = searchParams.get('data');
     const product = JSON.parse(data);
-    const router = useRouter();
     const { user } = useUserContext();
 
-    useEffect(() => {
-        user === null && router.push('/registration')
-    }, [user, router])
+    useCustomRedirect('/signin', user);
 
     const handleDecrement = () => {
         count > 1 && setCount(prev => prev - 1);
-    }
+    };
     const handleIncrement = () => {
         setCount(prev => prev + 1);
-    }
+    };
     const handleAddToCart = (product) => {
         const indexPrev = cart.findIndex(item => item.asin === product.asin);
         if (indexPrev === -1) {
@@ -32,24 +29,24 @@ export default function ProductPage() {
                 [...prev, {
                     ...product,
                     quantity: count
-                }]))
+                }]));
         } else {
             const newCart = [...cart];
             newCart[indexPrev].quantity += count;
-            setCart(newCart)
-        }
-    }
+            setCart(newCart);
+        };
+    };
 
     return (
         <>
             <div className='grid grid-cols-2 w-screen'>
-                <div className='col-start-1 flex justify-center'>
+                <div className='col-start-1 '>
                     <Image
                         src={product.imgUrl}
                         alt=''
                         width={500}
                         height={100}
-                        className=' m-10'
+                        className=' pr-10 pt-5 pl-5'
                     >
                     </Image>
                 </div>
@@ -60,9 +57,9 @@ export default function ProductPage() {
                     <div className='py-5 flex'>
                         <button className='p-2 mr-5 bg-black text-white' onClick={() => handleAddToCart(product)}>Add to cart +</button>
                         <div className='flex mx-5'>
-                            <button onClick={handleDecrement} className='m-2'>-</button>
-                            <p className='m-2'>{count}</p>
-                            <button onClick={handleIncrement} className='m-2'>+</button>
+                            <button onClick={handleDecrement} className='p-2'>-</button>
+                            <p className='p-2'>{count}</p>
+                            <button onClick={handleIncrement} className='p-2'>+</button>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,8 +11,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useUserContext } from '../context/userContext'
-import { useRouter } from 'next/navigation'
+import { useUserContext } from '../context/userContext';
+import { useRouter } from 'next/navigation';
 import { sendPasswordResetEmail } from "firebase/auth";
 
 function Copyright(props) {
@@ -25,7 +25,7 @@ function Copyright(props) {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  );;
 }
 
 const defaultTheme = createTheme();
@@ -46,7 +46,7 @@ export default function PasswordReset() {
         console.log(errorCode)
         console.log(errorMessage)
       });
-    router.push('/signin')
+    router.push('/signin');
   };
 
   return (

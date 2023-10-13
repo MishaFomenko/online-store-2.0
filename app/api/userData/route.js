@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { NextResponse } from 'next/server'
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, getDoc, getDocs, setDoc, updateDoc, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import { PurchasesByUser, PurchaseRecords } from '../../utils/customClasses';
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -19,14 +20,23 @@ const db = getFirestore(app);
 export async function GET(req) {
     const currentURL = new URL(req.url);
     const action = currentURL.searchParams.get('action');
-    const collection = currentURL.searchParams.get('collection');
+    const col = currentURL.searchParams.get('collection');
     const document = currentURL.searchParams.get('document');
     try {
         if (action === 'getuser') {
-            const docRef = doc(db, collection, document);
+            const docRef = doc(db, col, document);
             const docSnap = await getDoc(docRef);
             const userData = docSnap.data();
             return NextResponse.json(userData, { status: 200 })
+        }
+        if (action === 'getpurchases') {
+            const allData = await getDocs(collection(db, 'store'));
+            const purchasesRef = collection(db, col);
+            const q = query(purchasesRef, where('userID', '==', document));
+            const querySnapshot = await getDocs(q);
+            const records = new PurchasesByUser(querySnapshot);
+            const showableRecords = await records.getProdsFromPurchaseRecords(allData, getDocs, query, collection, db, where);
+            return NextResponse.json(showableRecords, { status: 200 });
         }
 
     } catch (error) {
@@ -41,6 +51,11 @@ export async function POST(req) {
             await setDoc(doc(db, "userdata", userData.uid), userData.newUserData);
             return NextResponse.json('success', { status: 200 })
         };
+        if (userData.action === "savePurchase") {
+            const savablePurchase = new PurchaseRecords(userData);
+            await savablePurchase.addPurchaseRecords(addDoc, collection, db);
+            return NextResponse.json('success', { status: 200 })
+        }
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
     }

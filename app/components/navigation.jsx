@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,11 +18,9 @@ import { useUserContext } from '../context/userContext';
 import { useCartContext } from '../context/cartContext';
 import ProductsMenu from './productsMenu';
 import CartCard from './cartCard';
-import SearchBar from './searchBar'
-import { getAuth, signOut, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
-import CartIcon from './cartIcon'
-
-const auth = getAuth();
+import SearchBar from './searchBar';
+import { signOut, setPersistence, browserSessionPersistence } from "firebase/auth";
+import CartIcon from './cartIcon';
 
 const pages = ['Home'];
 const settings = ['Account', 'Logout'];
@@ -30,7 +28,7 @@ const settings = ['Account', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, setUser } = useUserContext();
+  const { user, setUser, auth } = useUserContext();
   const { cartOpen } = useCartContext();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const router = useRouter();
@@ -47,8 +45,8 @@ function ResponsiveAppBar() {
   };
 
   const handleHome = () => {
-    router.push('/')
-  }
+    router.push('/');
+  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -56,8 +54,8 @@ function ResponsiveAppBar() {
 
   const handleUserAccount = async (setting) => {
     if (setting === 'Account') {
-      router.push('../account')
-    }
+      router.push('../account');
+    };
     if (setting === 'Logout') {
       const userCredential = await setPersistence(auth, browserSessionPersistence)
         .then(async () => {
@@ -69,13 +67,12 @@ function ResponsiveAppBar() {
           const errorCode = error.code;
           const errorMessage = error.message;
         });
-      setUser(null)
-      router.push('/signin')
-    }
-  }
+      setUser(null);
+    };
+  };
   const handleMenuClick = () => {
     setMenuOpen(prev => !prev);
-  }
+  };
 
   return (
     <AppBar position="static">
@@ -84,7 +81,7 @@ function ResponsiveAppBar() {
 
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {user !== null
+          {user !== null && typeof window !== 'undefined'
             ?
             <>
               <IconButton
@@ -92,15 +89,15 @@ function ResponsiveAppBar() {
                 edge="start"
                 color="inherit"
                 aria-label="menu"
-                sx={{ mr: 2 }}
                 onClick={handleMenuClick}
               >
                 <MenuIcon />
               </IconButton>
 
             </>
-
             :
+            typeof window !== 'undefined'
+            &&
             <>
               <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
               <Typography
@@ -109,7 +106,6 @@ function ResponsiveAppBar() {
                 component="a"
                 href="/"
                 sx={{
-                  mr: 2,
                   display: { xs: 'none', md: 'flex' },
                   fontFamily: 'monospace',
                   fontWeight: 700,
@@ -121,9 +117,10 @@ function ResponsiveAppBar() {
                 LOGO
               </Typography>
             </>
+
           }
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -159,8 +156,8 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+          {/* <Typography
             variant="h5"
             noWrap
             component="a"
@@ -177,22 +174,23 @@ function ResponsiveAppBar() {
             }}
           >
             LOGO
-          </Typography>
+          </Typography> */}
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: 'flex' }}>
             {user !== null && pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => (handleCloseNavMenu(), handleHome())}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: { xs: 'none', md: 'block' } }}
               >
                 {page}
               </Button>
             ))}
-            {user !== null ? <div className='w-full flex justify-center'><SearchBar /></div> : <></>}
+            {user !== null && typeof window !== 'undefined' && <div className='w-full flex justify-center'><SearchBar /></div>}
 
           </Box>
-          {user !== null &&
+          {
+            user !== null && typeof window !== 'undefined' &&
             <Box sx={{ flexGrow: 0 }}>
               <CartIcon />
               <Tooltip title="Open settings">
