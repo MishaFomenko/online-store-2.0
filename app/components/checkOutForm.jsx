@@ -73,11 +73,13 @@ export default function CheckOutForm() {
       return;
     }
     setIsLoading(true);
+    setCart([]);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        // return_url: "http://localhost:3000",
+        return_url: `${window.location.origin}/payment-complete`,
       },
     });
 
@@ -93,7 +95,7 @@ export default function CheckOutForm() {
     }
 
     setIsLoading(false);
-    setCart([]);
+
   };
 
   const paymentElementOptions = {

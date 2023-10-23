@@ -114,48 +114,50 @@ export default function BasicTabs() {
           ?
           <ErrorComponent />
           :
-          <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example" >
-                <Tab label="Profile" {...a11yProps(0)} />
-                <Tab label="Purchases" {...a11yProps(1)} />
-              </Tabs>
-            </Box>
-            <CustomTabPanel value={currentTab} index={0}>
-              {userData.first
-                ?
-                <Profile />
-                :
-                <div className='flex justify-center items-center h-screen'>
-                  <Spinner />
-                </div>
-              }
-            </CustomTabPanel>
-            <CustomTabPanel value={currentTab} index={1}>
-              <div className='w-full'>
-                {purchases.length
+          <div>
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example" >
+                  <Tab label="Profile" {...a11yProps(0)} />
+                  <Tab label="Purchases" {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <CustomTabPanel value={currentTab} index={0}>
+                {userData.first
                   ?
-                  Object.keys(groupedByDate).map((date, ind) => {
-                    const purchaseDate = new Date(date);
-                    return (
-                      <div key={ind}>
-                        <div>
-                          <p className='text-4xl'>{days[purchaseDate.getDay()]}, {months[purchaseDate.getMonth()] + ' ' + purchaseDate.getDate()}, {purchaseDate.getHours()}:{purchaseDate.getMinutes()}</p>
-                        </div>
-                        <div className='flex flex-wrap'>
-                          {groupedByDate[date].map((item) => <ProductCard key={item.asin} item={item} />)}
-                        </div>
-                      </div>
-                    )
-                  })
+                  <Profile />
                   :
                   <div className='flex justify-center items-center h-screen'>
                     <Spinner />
                   </div>
                 }
-              </div>
-            </CustomTabPanel>
-          </Box>
+              </CustomTabPanel>
+              <CustomTabPanel value={currentTab} index={1}>
+                <div className='w-full'>
+                  {purchases.length
+                    ?
+                    Object.keys(groupedByDate).sort((a, b) => new Date(b) - new Date(a)).map((date, ind) => {
+                      const purchaseDate = new Date(date);
+                      return (
+                        <div key={ind}>
+                          <div>
+                            <p className='text-4xl'>{days[purchaseDate.getDay()]}, {months[purchaseDate.getMonth()] + ' ' + purchaseDate.getDate()}, {purchaseDate.getHours()}:{purchaseDate.getMinutes()}</p>
+                          </div>
+                          <div className='flex flex-wrap'>
+                            {groupedByDate[date].map((item) => <ProductCard key={item.asin} item={item} />)}
+                          </div>
+                        </div>
+                      )
+                    })
+                    :
+                    <div className='flex justify-center items-center h-screen'>
+                      <Spinner />
+                    </div>
+                  }
+                </div>
+              </CustomTabPanel>
+            </Box>
+          </div>
       }
     </>
   );
