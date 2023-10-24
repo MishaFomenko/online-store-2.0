@@ -2,35 +2,56 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## The app is deployed at: 
 [online-store-2-0.vercel.app](https://online-store-2-0.vercel.app/registration)
-## Getting Started
 
-First, run the development server:
+## Problem Statement:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+Providing an web service which would allow the customers to shop online.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Product Requirements:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This application should allow users to:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+* Find the products they need by categories
+* Find the products they need by a keyword using a search bar
+* Check and edit user’s information
+* Purchase the products in needed quantities
+* Check the purchase history
 
-## Learn More
+## High level system architecture
 
-To learn more about Next.js, take a look at the following resources:
+The architecture diagram for this app can be found [here](https://link.excalidraw.com/readonly/qU1W8ED3y0PhK3PLMm1b).
+  
+## Data Models
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The daba model diagram for this app can be found [here](https://link.excalidraw.com/readonly/QKRp7vLCkWncEXjW5BXX).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## API Definitions
 
-## Deploy on Vercel
+API’s structure: 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* userData : manipulates user data stored in the db : 
+   - GET /userData/getuser/\[userId\] : gets user data from the DB to display the profile page;
+   - GET /userData/getpurchases/\[userId\] : gets user purchase history (if exists);
+   - POST /userData/register/\[userId\] : saves the initial data about the user;
+   - POST /userData/savePurchase/\[userId\] : saves a purchase record;
+   - PATCH /userdata/\[userId\] : allows to add/edit user information in the DB;
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+* products : getting the products data from the db upon website navigation; structuring products data for different pages of the UI; sorting the products data upon user’s interaction with the UI:
+   - GET /products/homepage : gets the bestsellers and recommended products;
+   - GET /products/searched : gets the products based on the user’s search by keywords;
+   - GET /products/categorypage : gets the products for a specific category;
+
+* payment  : processing payment; saving the purchased items to the userData section of the DB;
+
+## Risks
+
+There are a few risks to consider in this application so far:
+* Performance risks due to a large size of the DB and potentially big chunks of data requested by users
+* Predictability of the UX risks due to usage of the third-party prebuilt components (Material UI)
+
+
+## Alternatives
+
+For the storage of our products and user’s data there were a few choices including relational DBs like MySQL and PostgreSQL and noSQL DBs like MongoDB, Amazon DynamoDB and Firebase. Eventually we chose the Firebase because for the following reasons:
+* noSQL structure which is more suitable for our data model based on a large amount of deeply nested objects (in contrast to all relational DBs listed above);
+* Ability to set up user authentication in the same platform and integrate it with the DB interactions (in contrast to Amazon DynamoDB);
